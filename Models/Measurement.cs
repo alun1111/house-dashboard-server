@@ -10,4 +10,10 @@ namespace house_dashboard_server.Models
         public decimal Current { get; set; }
         public IList<decimal> Recent { get; set; }
     }
+
+    public class MeasurementPoint
+    {
+        public DateTime MeasurementTime { get; set; }
+        public IList<Measurement> Measurements { get; set; }
+    }
 }
