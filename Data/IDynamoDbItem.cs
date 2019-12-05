@@ -2,9 +2,9 @@
 
 namespace house_dashboard_server.Data
 {
-    public interface IDynamoDbItem
+    public interface IDynamoDbItem<T>
     {
         DateTime MeasurementTime { get; }
-        decimal Value { get; }
+        T Value { get; }
     }
 }

@@ -12,7 +12,7 @@ namespace house_dashboard_server
     [Route("[controller]")]
     public class MeasurementPointController : ControllerBase
     {
-        private MeasurementPointRepository _measurementPointRepository;
+        private readonly MeasurementPointRepository _measurementPointRepository;
 
         public MeasurementPointController()
         {
@@ -20,11 +20,9 @@ namespace house_dashboard_server
         }
 
         [HttpGet]
-        public async Task<MeasurementPoint> Get()
+        public MeasurementPoint Get()
         {
-            return await _measurementPointRepository
-                .GetMeasurementPoint()
-                .ConfigureAwait(false);
+            return _measurementPointRepository.GetMeasurementPoint();
         }
     }
 }

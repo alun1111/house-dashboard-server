@@ -1,12 +1,11 @@
 ﻿using house_dashboard_server.Data;
 using System.Collections.Generic;
-using System.Text;
 
 namespace house_dashboard_server.Models
 {
-    public class Measurement
+    public class Measurement<T>
     {
-        public Measurement(string name, IDynamoDbItem current, List<IDynamoDbItem> recent)
+        public Measurement(string name, IDynamoDbItem<T> current, List<IDynamoDbItem<T>> recent)
         {
             Name = name;
             Current = current;
@@ -14,7 +13,7 @@ namespace house_dashboard_server.Models
         }
 
         public string Name { get; }
-        public IDynamoDbItem Current { get; }
-        public List<IDynamoDbItem> Recent { get; }
+        public IDynamoDbItem<T> Current { get; }
+        public List<IDynamoDbItem<T>> Recent { get; }
     }
 }
