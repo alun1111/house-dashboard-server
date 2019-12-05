@@ -20,9 +20,11 @@ namespace house_dashboard_server
         }
 
         [HttpGet]
-        public MeasurementPoint Get()
+        public async Task<MeasurementPoint> Get()
         {
-            return _measurementPointRepository.GetMeasurementPoint();
+            return await _measurementPointRepository
+                .GetMeasurementPoint()
+                .ConfigureAwait(false);
         }
     }
 }

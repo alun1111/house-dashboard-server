@@ -4,28 +4,30 @@ using Amazon.DynamoDBv2.DocumentModel;
 using house_dashboard_server.Models;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace house_dashboard_server.Data
 {
     public class MeasurementPointRepository
     {
-        public MeasurementPoint GetMeasurementPoint()
+        private readonly IFormatProvider _culture = CultureInfo.CreateSpecificCulture("en-GB");
+
+        public async Task<MeasurementPoint> GetMeasurementPoint()
         {
-            var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
-            
+            using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
             return new MeasurementPoint()
             {
                 MeasurementTime = DateTime.Now,
                 Measurements = new List<Measurement>()
-                {
-                    GetWeatherMeasurement(client)
-                }
+                    {
+                        await GetWeatherMeasurement(client).ConfigureAwait(false)
+                    }
             };
-
         }
 
-        private Measurement GetWeatherMeasurement(AmazonDynamoDBClient client)
+        private async Task<Measurement> GetWeatherMeasurement(AmazonDynamoDBClient client)
         {
             var table = Table.LoadTable(client, "Weather");
 
@@ -34,18 +36,18 @@ namespace house_dashboard_server.Data
                 ScanOperator.GreaterThan, 
                 DateTime.UtcNow.AddDays(-1));
 
-            var resultsList = table
+            var resultsList = await table
                 .Scan(scanFilter)
                 .GetRemainingAsync()
-                .Result;
+                .ConfigureAwait(false);
 
             List<TemperatureItem> items = new List<TemperatureItem>();
 
             resultsList.ForEach((d) =>
             {
                 items.Add(new TemperatureItem(
-                    DateTime.Parse(d["MeasurementTime"]), 
-                    decimal.Parse(d["OutsideTemperature"])));
+                    DateTime.Parse(d["MeasurementTime"], _culture), 
+                    decimal.Parse(d["OutsideTemperature"], _culture)));
             });
 
             var orderedItems = items.OrderByDescending(x => x.MeasurementTime);
