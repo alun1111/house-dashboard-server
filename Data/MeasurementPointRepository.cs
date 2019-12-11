@@ -25,7 +25,7 @@ namespace house_dashboard_server.Data
 
             return new MeasurementPoint()
             {
-                MeasurementTime = DateTime.Now,
+                ReportingTime = DateTime.Now,
                 Measurements = new List<Measurement<decimal>>()
                     { 
                         outsideTemperatureMeasurement.Result,
@@ -43,9 +43,12 @@ namespace house_dashboard_server.Data
 
             weatherTableScanResult.ForEach((d) =>
             {
-                reducedScanResult.Add(new DynamoDbItem<decimal>(
-                    DateTime.Parse(d["MeasurementTime"], _culture),
-                    decimal.Parse(d["OutsideTemperature"], _culture)));
+                var temp = decimal.Parse(d["OutsideTemperature"], _culture);
+                var convertedTemp = (temp - 32) * 5 / 9;
+                    reducedScanResult.Add(new DynamoDbItem<decimal>(
+                        DateTime.Parse(d["MeasurementTime"], _culture),
+                        convertedTemp
+                        ));
             });
 
             return CreateMeasurement("OutsideTemperature", reducedScanResult);

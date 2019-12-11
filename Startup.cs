@@ -28,6 +28,7 @@ namespace house_dashboard_server
             }
 
             app.UseRouting();
+            app.UseCors();
 
             app.UseEndpoints(endpoints =>
             {

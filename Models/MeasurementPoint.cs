@@ -5,7 +5,7 @@ namespace house_dashboard_server.Models
 {
     public class MeasurementPoint
     {
-        public DateTime MeasurementTime { get; set; }
+        public DateTime ReportingTime { get; set; }
         public IList<Measurement<decimal>> Measurements { get; set; }
     }
 }
