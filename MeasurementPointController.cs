@@ -1,5 +1,6 @@
 ﻿using house_dashboard_server.Data;
 using house_dashboard_server.Models;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,7 @@ namespace house_dashboard_server
             _measurementPointRepository = new MeasurementPointRepository();
         }
 
+        [EnableCors("default-policy")]
         [HttpGet]
         public MeasurementPoint Get()
         {
