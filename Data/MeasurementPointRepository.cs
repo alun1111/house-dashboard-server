@@ -74,8 +74,8 @@ namespace house_dashboard_server.Data
         private static Measurement<decimal> CreateMeasurement(string measurementName, 
             List<DynamoDbItem<decimal>> reducedScanResult)
         {
-            var orderedScanResult = reducedScanResult.OrderByDescending(x => x.MeasurementTime);
-            var latestMeasurement = orderedScanResult.FirstOrDefault();
+            var orderedScanResult = reducedScanResult.OrderBy(x => x.MeasurementTime);
+            var latestMeasurement = orderedScanResult.LastOrDefault();
 
             return new Measurement<decimal>(
                 name: measurementName,
