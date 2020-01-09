@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace house_dashboard_server.Models
 {
-    public class Measurement<T>
+    public class Reading<T>
     {
-        public Measurement(string name, IDynamoDbItem<T> current, List<IDynamoDbItem<T>> recent)
+        public Reading(string name, IDynamoDbItem<T> current, List<IDynamoDbItem<T>> recent)
         {
             Name = name;
             Current = current;

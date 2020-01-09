@@ -11,20 +11,17 @@ namespace house_dashboard_server
 {
     [ApiController]
     [Route("[controller]")]
-    public class MeasurementPointController : ControllerBase
+    public class WeatherStationReadingsController : ControllerBase
     {
-        private readonly MeasurementPointRepository _measurementPointRepository;
+        private readonly WeatherStationReadingRepository _readingSetRepository;
 
-        public MeasurementPointController()
+        public WeatherStationReadingsController()
         {
-            _measurementPointRepository = new MeasurementPointRepository();
+            _readingSetRepository = new WeatherStationReadingRepository();
         }
 
         [EnableCors("default-policy")]
         [HttpGet]
-        public MeasurementPoint Get()
-        {
-            return _measurementPointRepository.GetMeasurementPoint();
-        }
+        public async Task<ReadingSet> Get() => await _readingSetRepository.GetReadingSet();
     }
 }
