@@ -26,7 +26,7 @@ namespace house_dashboard_server.Data
             _numberReadingFactory = new NumberReadingFactory();
         }
 
-        public async Task<ReadingSet> GetReadingSet()
+        public async Task<ReadingSet<decimal>> GetReadingSet()
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
@@ -36,7 +36,7 @@ namespace house_dashboard_server.Data
                     "monitoring-station-id",
                     STATION_ID_ALMONDELL);
 
-            return new ReadingSet()
+            return new ReadingSet<decimal>()
             {
                 Readings = new List<Reading<decimal>>()
                 { 

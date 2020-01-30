@@ -19,6 +19,6 @@ namespace house_dashboard_server
 
         [EnableCors("default-policy")]
         [HttpGet]
-        public async Task<ReadingSet> Get() => await _readingSetRepository.GetReadingSet();
+        public async Task<ReadingSet<decimal>> Get() => await _readingSetRepository.GetReadingSet();
     }
 }

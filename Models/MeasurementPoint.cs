@@ -3,8 +3,8 @@ using System.Collections.Generic;
 
 namespace house_dashboard_server.Models
 {
-    public class ReadingSet
+    public class ReadingSet<T>
     {
-        public IList<Reading<decimal>> Readings { get; set; }
+        public IList<Reading<T>> Readings { get; set; }
     }
 }
