@@ -11,9 +11,6 @@ namespace house_dashboard_server.Data
 {
     public class RiverLevelReadingsRepository
     {
-        private const string STATION_ID_ALMONDELL = "14869-SG";
-        private const string STATION_NAME_ALMONDELL = "Almond (Lothian) : Almondell";
-
         private readonly IFormatProvider _culture 
             = CultureInfo.CreateSpecificCulture("en-GB");
 
@@ -26,7 +23,7 @@ namespace house_dashboard_server.Data
             _numberReadingFactory = new NumberReadingFactory();
         }
 
-        public async Task<ReadingSet<decimal>> GetReadingSet()
+        public async Task<ReadingSet<decimal>> GetReadingSet(string stationId)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
@@ -34,18 +31,18 @@ namespace house_dashboard_server.Data
                 _dynamoTableQueryRunner.QueryDynamoDbTable(client,
                     "river-level-readings",
                     "monitoring-station-id",
-                    STATION_ID_ALMONDELL);
+                    stationId);
 
             return new ReadingSet<decimal>()
             {
                 Readings = new List<Reading<decimal>>()
                 { 
-                    PrepareRiverLevelReading(queryResult),
+                    PrepareRiverLevelReading(queryResult, stationId),
                 }
             };
         }
 
-        private Reading<decimal> PrepareRiverLevelReading(List<Document> queryResult)
+        private Reading<decimal> PrepareRiverLevelReading(List<Document> queryResult, string stationId)
         {
             var reducedScanResult = new List<DynamoDbItem<decimal>>();
 
@@ -58,7 +55,7 @@ namespace house_dashboard_server.Data
                     ));
             });
 
-            return _numberReadingFactory.BuildReading(STATION_NAME_ALMONDELL, reducedScanResult);
+            return _numberReadingFactory.BuildReading(stationId, reducedScanResult);
         }
     }
 }
