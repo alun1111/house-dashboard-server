@@ -2,13 +2,18 @@
 using Amazon.DynamoDBv2.DocumentModel;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Threading.Tasks;
 
 namespace house_dashboard_server.Data
 {
     public class DynamoTableQueryRunner
     {
-        public async Task<List<Document>> QueryDynamoDbTable(AmazonDynamoDBClient client,
+
+        private readonly IFormatProvider _culture 
+            = CultureInfo.CreateSpecificCulture("en-GB");
+
+        public async Task<List<Document>> QueryOnTimestampRange(AmazonDynamoDBClient client,
                                                                      string tableName,
                                                                      string partionKey,
                                                                      string partitionValue)
@@ -18,9 +23,13 @@ namespace house_dashboard_server.Data
             var queryFilter = 
                 new QueryFilter(partionKey, QueryOperator.Equal, partitionValue);
 
+            var fromDateTime = DateTime.UtcNow
+                .AddDays(-1)
+                .ToString("yyyy-MM-dd HH:mm:ss", _culture);
+
             queryFilter.AddCondition("timestamp",
-                QueryOperator.GreaterThan,
-                DateTime.UtcNow.AddDays(-1));
+                QueryOperator.GreaterThanOrEqual,
+                fromDateTime);
 
             var queryResult = await table
                 .Query(queryFilter)

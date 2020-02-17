@@ -28,10 +28,10 @@ namespace house_dashboard_server.Data
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
             var queryResult = await
-                _dynamoTableQueryRunner.QueryDynamoDbTable(client,
-                    "weather-station-readings",
-                    "station-id",
-                    "wmr-89");
+                _dynamoTableQueryRunner.QueryOnTimestampRange(client,
+                    tableName: "weather-station-readings",
+                    partionKey: "station-id",
+                    partitionValue: "wmr-89");
 
             return new ReadingSet<decimal>()
             {

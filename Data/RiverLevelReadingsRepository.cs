@@ -28,11 +28,11 @@ namespace house_dashboard_server.Data
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
             var queryResult = await
-                _dynamoTableQueryRunner.QueryDynamoDbTable(client,
-                    "river-level-readings",
-                    "monitoring-station-id",
-                    stationId);
-
+                _dynamoTableQueryRunner.QueryOnTimestampRange(client,
+                    tableName: "river-level-readings",
+                    partionKey: "monitoring-station-id",
+                    partitionValue: stationId);
+                    
             return new ReadingSet<decimal>()
             {
                 Readings = new List<Reading<decimal>>()
