@@ -18,8 +18,13 @@ namespace house_dashboard_server
         }
 
         [EnableCors("default-policy")]
+        [HttpGet]
+        public async Task<ReadingSet<decimal>> Get() 
+            => await _readingSetRepository.GetReadingSet();
+
+        [EnableCors("default-policy")]
         [HttpGet("{id}")]
-        public async Task<ReadingSet<decimal>> Get(string id) 
-            => await _readingSetRepository.GetReadingSet(id);
+        public async Task<Reading<decimal>> Get(string id) 
+            => await _readingSetRepository.GetReading(id);
     }
 }

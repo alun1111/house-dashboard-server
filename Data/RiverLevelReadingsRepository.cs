@@ -23,7 +23,12 @@ namespace house_dashboard_server.Data
             _numberReadingFactory = new NumberReadingFactory();
         }
 
-        public async Task<ReadingSet<decimal>> GetReadingSet(string stationId)
+        public async Task<ReadingSet<decimal>> GetReadingSet()
+        {
+            throw new NotImplementedException("No requirement for returning all at once yet");
+        }
+
+        public async Task<Reading<decimal>> GetReading(string stationId)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
@@ -32,14 +37,8 @@ namespace house_dashboard_server.Data
                     tableName: "river-level-readings",
                     partionKey: "monitoring-station-id",
                     partitionValue: stationId);
-                    
-            return new ReadingSet<decimal>()
-            {
-                Readings = new List<Reading<decimal>>()
-                { 
-                    PrepareRiverLevelReading(queryResult, stationId),
-                }
-            };
+
+            return PrepareRiverLevelReading(queryResult, stationId);
         }
 
         private Reading<decimal> PrepareRiverLevelReading(List<Document> queryResult, string stationId)
