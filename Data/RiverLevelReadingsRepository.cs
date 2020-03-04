@@ -36,7 +36,8 @@ namespace house_dashboard_server.Data
                 _dynamoTableQueryRunner.QueryOnTimestampRange(client,
                     tableName: "river-level-readings",
                     partionKey: "monitoring-station-id",
-                    partitionValue: stationId);
+                    partitionValue: stationId,
+                    days: 3);
 
             return PrepareRiverLevelReading(queryResult, stationId);
         }

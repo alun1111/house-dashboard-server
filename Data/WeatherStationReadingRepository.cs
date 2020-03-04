@@ -31,7 +31,8 @@ namespace house_dashboard_server.Data
                 _dynamoTableQueryRunner.QueryOnTimestampRange(client,
                     tableName: "weather-station-readings",
                     partionKey: "station-id",
-                    partitionValue: "wmr-89");
+                    partitionValue: "wmr-89",
+                    days: 1);
 
             return new ReadingSet<decimal>()
             {

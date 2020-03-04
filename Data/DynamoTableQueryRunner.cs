@@ -16,7 +16,8 @@ namespace house_dashboard_server.Data
         public async Task<List<Document>> QueryOnTimestampRange(AmazonDynamoDBClient client,
                                                                      string tableName,
                                                                      string partionKey,
-                                                                     string partitionValue)
+                                                                     string partitionValue,
+                                                                     int days)
         {
             var table = Table.LoadTable(client, tableName);
 
@@ -24,7 +25,7 @@ namespace house_dashboard_server.Data
                 new QueryFilter(partionKey, QueryOperator.Equal, partitionValue);
 
             var fromDateTime = DateTime.UtcNow
-                .AddDays(-1)
+                .AddDays(-days)
                 .ToString("yyyy-MM-dd HH:mm:ss", _culture);
 
             queryFilter.AddCondition("timestamp",
