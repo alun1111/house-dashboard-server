@@ -34,7 +34,7 @@ namespace house_dashboard_server.Data
 
             var queryResult = await
                 _dynamoTableQueryRunner.QueryOnTimestampRange(client,
-                    tableName: "river-level-readings",
+                    tableName: "rainfall-readings",
                     partionKey: "monitoring-station-id",
                     partitionValue: stationId,
                     days: 3);

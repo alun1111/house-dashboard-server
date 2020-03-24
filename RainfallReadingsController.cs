@@ -10,11 +10,11 @@ namespace house_dashboard_server
     [Route("[controller]")]
     public class RainfallController : ControllerBase
     {
-        private readonly RainfallRepository _rainfallRepository;
+        private readonly RainfallReadingsRepository _rainfallRepository;
 
         public RainfallController()
         {
-            _rainfallRepository = new RainfallRepository();
+            _rainfallRepository = new RainfallReadingsRepository();
         }
 
         [EnableCors("default-policy")]
