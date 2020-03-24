@@ -6,13 +6,13 @@ namespace house_dashboard_server.Data
 {
     public class NumberReadingFactory
     {
-        public Reading<decimal> BuildReading(string measurementName, 
+        public NumberReading<decimal> BuildReading(string measurementName, 
             List<DynamoDbItem<decimal>> reducedScanResult)
         {
             var orderedScanResult = reducedScanResult.OrderBy(x => x.MeasurementTime);
             var latestMeasurement = orderedScanResult.LastOrDefault();
 
-            return new Reading<decimal>(
+            return new NumberReading<decimal>(
                 name: measurementName,
                 current: new DynamoDbItem<decimal>(
                     latestMeasurement.MeasurementTime,

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace house_dashboard_server.Models
 {
-    public class Reading<T>
+    public class NumberReading<T>
     {
-        public Reading(string name, IDynamoDbItem<T> current, List<IDynamoDbItem<T>> recent)
+        public NumberReading(string name, IDynamoDbItem<T> current, List<IDynamoDbItem<T>> recent)
         {
             Name = name;
             Current = current;
