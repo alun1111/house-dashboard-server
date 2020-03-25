@@ -36,7 +36,7 @@ namespace house_dashboard_server.Data
 
             return new ReadingSet<decimal>()
             {
-                Readings = new List<Reading<decimal>>()
+                Readings = new List<NumberReading<decimal>>()
                 { 
                     PrepareOutsideTempReading(queryResult),
                     PrepareInsideTempReading(queryResult)
@@ -44,7 +44,7 @@ namespace house_dashboard_server.Data
             };
         }
 
-        private Reading<decimal> PrepareOutsideTempReading(List<Document> queryResult)
+        private NumberReading<decimal> PrepareOutsideTempReading(List<Document> queryResult)
         {
             var reducedScanResult = new List<DynamoDbItem<decimal>>();
 
@@ -61,7 +61,7 @@ namespace house_dashboard_server.Data
             return _numberReadingFactory.BuildReading("OutsideTemperature", reducedScanResult);
         }
 
-        private Reading<decimal> PrepareInsideTempReading(List<Document> queryResult)
+        private NumberReading<decimal> PrepareInsideTempReading(List<Document> queryResult)
         {
             List<DynamoDbItem<decimal>> reducedScanResult = new List<DynamoDbItem<decimal>>();
 

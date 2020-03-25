@@ -24,7 +24,7 @@ namespace house_dashboard_server
 
         [EnableCors("default-policy")]
         [HttpGet("{id}")]
-        public async Task<Reading<decimal>> Get(string id) 
+        public async Task<NumberReading<decimal>> Get(string id) 
             => await _readingSetRepository.GetReading(id);
     }
 }

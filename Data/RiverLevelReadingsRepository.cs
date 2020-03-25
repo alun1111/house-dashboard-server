@@ -28,7 +28,7 @@ namespace house_dashboard_server.Data
             throw new NotImplementedException("No requirement for returning all at once yet");
         }
 
-        public async Task<Reading<decimal>> GetReading(string stationId)
+        public async Task<NumberReading<decimal>> GetReading(string stationId)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
@@ -42,7 +42,7 @@ namespace house_dashboard_server.Data
             return PrepareRiverLevelReading(queryResult, stationId);
         }
 
-        private Reading<decimal> PrepareRiverLevelReading(List<Document> queryResult, string stationId)
+        private NumberReading<decimal> PrepareRiverLevelReading(List<Document> queryResult, string stationId)
         {
             var reducedScanResult = new List<DynamoDbItem<decimal>>();
 
