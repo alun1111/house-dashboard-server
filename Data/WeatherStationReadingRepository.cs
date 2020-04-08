@@ -23,7 +23,7 @@ namespace house_dashboard_server.Data
             _numberReadingFactory = new NumberReadingFactory();
         }
 
-        public async Task<ReadingSet<decimal>> GetReadingSet()
+        public async Task<ReadingSet<decimal>> GetReadingSet(string stationId, TemperatureReadingType type)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
@@ -31,17 +31,30 @@ namespace house_dashboard_server.Data
                 _dynamoTableQueryRunner.QueryOnTimestampRange(client,
                     tableName: "weather-station-readings",
                     partionKey: "station-id",
-                    partitionValue: "wmr-89",
+                    partitionValue: stationId,
                     days: 1);
 
-            return new ReadingSet<decimal>()
+            switch (type)
             {
-                Readings = new List<NumberReading<decimal>>()
-                { 
-                    PrepareOutsideTempReading(queryResult),
-                    PrepareInsideTempReading(queryResult)
-                }
-            };
+                case TemperatureReadingType.INSIDE:
+                    return new ReadingSet<decimal>()
+                    {
+                        Readings = new List<NumberReading<decimal>>()
+                        { 
+                            PrepareInsideTempReading(queryResult)
+                        }
+                    };
+                case TemperatureReadingType.OUTSIDE:
+                    return new ReadingSet<decimal>()
+                    {
+                        Readings = new List<NumberReading<decimal>>()
+                        { 
+                            PrepareOutsideTempReading(queryResult),
+                        }
+                    };
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(type), type, "Unknown temperature reading type");
+            }
         }
 
         private NumberReading<decimal> PrepareOutsideTempReading(List<Document> queryResult)
