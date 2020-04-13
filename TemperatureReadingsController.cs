@@ -2,9 +2,6 @@
 using house_dashboard_server.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace house_dashboard_server
@@ -26,8 +23,13 @@ namespace house_dashboard_server
             => await _weatherReadingsRepository.GetReadingSet();
 
         [EnableCors("default-policy")]
-        [HttpGet("{id}")]
-        public async Task<NumberReading<decimal>> Get(string id) 
-            => await _weatherReadingsRepository.GetReading(id);
+        [HttpGet("{id}/inside")]
+        public async Task<NumberReading<decimal>> GetInside(string id) 
+            => await _weatherReadingsRepository.GetTemperatureReading(id, TemperatureReadingType.INSIDE);
+        
+        [EnableCors("default-policy")]
+        [HttpGet("{id}/outside")]
+        public async Task<NumberReading<decimal>> GetOutside(string id) 
+            => await _weatherReadingsRepository.GetTemperatureReading(id, TemperatureReadingType.OUTSIDE);
     }
 }

@@ -23,7 +23,12 @@ namespace house_dashboard_server.Data
             _numberReadingFactory = new NumberReadingFactory();
         }
 
-        public async Task<ReadingSet<decimal>> GetReadingSet(string stationId, TemperatureReadingType type)
+        public async Task<ReadingSet<decimal>> GetReadingSet()
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<NumberReading<decimal>> GetTemperatureReading(string stationId, TemperatureReadingType type)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
@@ -37,21 +42,9 @@ namespace house_dashboard_server.Data
             switch (type)
             {
                 case TemperatureReadingType.INSIDE:
-                    return new ReadingSet<decimal>()
-                    {
-                        Readings = new List<NumberReading<decimal>>()
-                        { 
-                            PrepareInsideTempReading(queryResult)
-                        }
-                    };
+                    return PrepareInsideTempReading(queryResult);
                 case TemperatureReadingType.OUTSIDE:
-                    return new ReadingSet<decimal>()
-                    {
-                        Readings = new List<NumberReading<decimal>>()
-                        { 
-                            PrepareOutsideTempReading(queryResult),
-                        }
-                    };
+                    return PrepareOutsideTempReading(queryResult);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, "Unknown temperature reading type");
             }
