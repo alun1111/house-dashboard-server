@@ -28,10 +28,12 @@ namespace house_dashboard_server.Data
             throw new NotImplementedException();
         }
 
-        public async Task<NumberReading<decimal>> GetTemperatureReading(string stationId, TemperatureReadingType type)
+        public async Task<NumberReading<decimal>> GetTemperatureReading(string stationId, TemperatureReadingType type, string timeFormatHeader)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
+            var timeFormat = timeFormatHeader == "number" ? TimeFormat.NUMBER : TimeFormat.STRING;
+            
             var queryResult = await
                 _dynamoTableQueryRunner.QueryOnTimestampRange(client,
                     tableName: "weather-station-readings",
@@ -42,15 +44,15 @@ namespace house_dashboard_server.Data
             switch (type)
             {
                 case TemperatureReadingType.INSIDE:
-                    return PrepareInsideTempReading(queryResult);
+                    return PrepareInsideTempReading(queryResult, timeformat);
                 case TemperatureReadingType.OUTSIDE:
-                    return PrepareOutsideTempReading(queryResult);
+                    return PrepareOutsideTempReading(queryResult, timeformat);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, "Unknown temperature reading type");
             }
         }
 
-        private NumberReading<decimal> PrepareOutsideTempReading(List<Document> queryResult)
+        private NumberReading<decimal> PrepareOutsideTempReading(List<Document> queryResult, TimeFormat timeFormat)
         {
             var reducedScanResult = new List<DynamoDbItem<decimal>>();
 
@@ -67,7 +69,7 @@ namespace house_dashboard_server.Data
             return _numberReadingFactory.BuildReading("OutsideTemperature", reducedScanResult);
         }
 
-        private NumberReading<decimal> PrepareInsideTempReading(List<Document> queryResult)
+        private NumberReading<decimal> PrepareInsideTempReading(List<Document> queryResult, TimeFormat timeFormat)
         {
             List<DynamoDbItem<decimal>> reducedScanResult = new List<DynamoDbItem<decimal>>();
 

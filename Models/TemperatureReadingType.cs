@@ -4,4 +4,5 @@ namespace house_dashboard_server.Models
     {
         INSIDE, OUTSIDE
     }
-}
+
+    
