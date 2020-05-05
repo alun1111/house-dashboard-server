@@ -48,10 +48,13 @@ namespace house_dashboard_server.Data
 
             queryResult.ForEach((d) =>
             {
+                var readingDate = DateTime.Parse(d["timestamp"], _culture);
+                var dateTimeOffset = new DateTimeOffset(readingDate);
+                var unixDateTime = dateTimeOffset.ToUnixTimeSeconds();
                 var depth = decimal.Parse(d["depth"], _culture);
+                
                 reducedScanResult.Add(new DynamoDbItem<decimal>(
-                    DateTime.Parse(d["timestamp"], _culture),
-                    depth
+                    readingDate, unixDateTime,depth
                     ));
             });
 

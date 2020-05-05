@@ -26,16 +26,12 @@ namespace house_dashboard_server
         [HttpGet("{id}/inside")]
         public async Task<NumberReading<decimal>> GetInside(string id) 
             => await _weatherReadingsRepository.GetTemperatureReading(id
-                , TemperatureReadingType.INSIDE
-                ,Request.Headers["X-time-format"]);
+                , TemperatureReadingType.INSIDE);
 
         [EnableCors("default-policy")]
         [HttpGet("{id}/outside")]
         public async Task<NumberReading<decimal>> GetOutside(string id)
-        {
-            await _weatherReadingsRepository.GetTemperatureReading(id
-                , TemperatureReadingType.OUTSIDE
-                ,Request.Headers["x-time-format"]);
-        }
+            => await _weatherReadingsRepository.GetTemperatureReading(id
+                , TemperatureReadingType.OUTSIDE);
     }
 }

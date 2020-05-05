@@ -28,11 +28,9 @@ namespace house_dashboard_server.Data
             throw new NotImplementedException();
         }
 
-        public async Task<NumberReading<decimal>> GetTemperatureReading(string stationId, TemperatureReadingType type, string timeFormatHeader)
+        public async Task<NumberReading<decimal>> GetTemperatureReading(string stationId, TemperatureReadingType type)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
-
-            var timeFormat = timeFormatHeader == "number" ? TimeFormat.NUMBER : TimeFormat.STRING;
             
             var queryResult = await
                 _dynamoTableQueryRunner.QueryOnTimestampRange(client,
@@ -44,15 +42,15 @@ namespace house_dashboard_server.Data
             switch (type)
             {
                 case TemperatureReadingType.INSIDE:
-                    return PrepareInsideTempReading(queryResult, timeformat);
+                    return PrepareInsideTempReading(queryResult);
                 case TemperatureReadingType.OUTSIDE:
-                    return PrepareOutsideTempReading(queryResult, timeformat);
+                    return PrepareOutsideTempReading(queryResult);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, "Unknown temperature reading type");
             }
         }
 
-        private NumberReading<decimal> PrepareOutsideTempReading(List<Document> queryResult, TimeFormat timeFormat)
+        private NumberReading<decimal> PrepareOutsideTempReading(List<Document> queryResult)
         {
             var reducedScanResult = new List<DynamoDbItem<decimal>>();
 
@@ -60,16 +58,19 @@ namespace house_dashboard_server.Data
             {
                 var temp = decimal.Parse(d["outside-temp"], _culture);
                 var convertedTemp = (temp - 32) * 5 / 9;
+                var readingDate = DateTime.Parse(d["timestamp"], _culture);
+                var dateTimeOffset = new DateTimeOffset(readingDate);
+                var unixDateTime = dateTimeOffset.ToUnixTimeSeconds();
+                
                 reducedScanResult.Add(new DynamoDbItem<decimal>(
-                    DateTime.Parse(d["timestamp"], _culture),
-                    convertedTemp
+                    readingDate, unixDateTime,convertedTemp
                     ));
             });
 
             return _numberReadingFactory.BuildReading("OutsideTemperature", reducedScanResult);
         }
 
-        private NumberReading<decimal> PrepareInsideTempReading(List<Document> queryResult, TimeFormat timeFormat)
+        private NumberReading<decimal> PrepareInsideTempReading(List<Document> queryResult)
         {
             List<DynamoDbItem<decimal>> reducedScanResult = new List<DynamoDbItem<decimal>>();
 
@@ -77,9 +78,12 @@ namespace house_dashboard_server.Data
             {
                 var temp = decimal.Parse(d["inside-temp"], _culture);
                 var convertedTemp = (temp - 32) * 5 / 9;
+                var readingDate = DateTime.Parse(d["timestamp"], _culture);
+                var dateTimeOffset = new DateTimeOffset(readingDate);
+                var unixDateTime = dateTimeOffset.ToUnixTimeSeconds();
+                
                 reducedScanResult.Add(new DynamoDbItem<decimal>(
-                    DateTime.Parse(d["timestamp"], _culture),
-                    convertedTemp
+                    readingDate, unixDateTime,convertedTemp
                     ));
             });
 
