@@ -16,13 +16,13 @@ namespace house_dashboard_server.Data
 
             return new NumberReading<decimal>(
                 name: measurementName,
-                current: new DynamoDbItem<decimal>(
-                    latestMeasurement.MeasurementTime,
-                    latestMeasurement.TimeIndex,
-                    latestMeasurement.Value),
+                current: latestMeasurement,
                 recent: orderedScanResult
-                    .Skip(1)
-                    .Select(s => new DynamoDbItem<decimal>(s.MeasurementTime, s.TimeIndex, s.Value) as IDynamoDbItem<decimal>)
+                    .Select(s 
+                        => new DynamoDbItem<decimal>(
+                            s.MeasurementTime
+                            , s.TimeIndex
+                            , s.Value) as IDynamoDbItem<decimal>)
                     .ToList()
                     );
         }

@@ -15,4 +15,29 @@
     <PackageReference Include="Swashbuckle.AspNetCore" Version="5.2.1" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Remove="tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Remove="tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Remove="tests\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="tests\bin\Debug\netcoreapp3.1\tests.deps.json" />
+    <_ContentIncludedByDefault Remove="tests\bin\Debug\netcoreapp3.1\tests.runtimeconfig.dev.json" />
+    <_ContentIncludedByDefault Remove="tests\bin\Debug\netcoreapp3.1\tests.runtimeconfig.json" />
+    <_ContentIncludedByDefault Remove="tests\obj\project.assets.json" />
+    <_ContentIncludedByDefault Remove="tests\obj\project.packagespec.json" />
+    <_ContentIncludedByDefault Remove="tests\obj\tests.csproj.nuget.dgspec.json" />
+  </ItemGroup>
+
 </Project>
