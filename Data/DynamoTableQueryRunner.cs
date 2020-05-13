@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 
-namespace house_dashboard_server.Data
+namespace HouseDashboardServer.Data
 {
     public class DynamoTableQueryRunner
     {
@@ -13,7 +13,7 @@ namespace house_dashboard_server.Data
         private readonly IFormatProvider _culture 
             = CultureInfo.CreateSpecificCulture("en-GB");
 
-        public async Task<List<Document>> QueryOnTimestampRange(AmazonDynamoDBClient client,
+        public Task<List<Document>> QueryOnTimestampRange(AmazonDynamoDBClient client,
                                                                      string tableName,
                                                                      string partionKey,
                                                                      string partitionValue,
@@ -32,10 +32,9 @@ namespace house_dashboard_server.Data
                 QueryOperator.GreaterThanOrEqual,
                 fromDateTime);
 
-            var queryResult = await table
+            var queryResult = table
                 .Query(queryFilter)
-                .GetRemainingAsync()
-                .ConfigureAwait(false);
+                .GetRemainingAsync();
 
             return queryResult;
         }

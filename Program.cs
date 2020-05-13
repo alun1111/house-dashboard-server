@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace house_dashboard_server
+namespace HouseDashboardServer
 {
     public class Program
     {

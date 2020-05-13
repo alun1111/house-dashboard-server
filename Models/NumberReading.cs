@@ -1,7 +1,7 @@
-﻿using house_dashboard_server.Data;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using HouseDashboardServer.Data;
 
-namespace house_dashboard_server.Models
+namespace HouseDashboardServer.Models
 {
     public class NumberReading<T>
     {

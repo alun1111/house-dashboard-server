@@ -1,13 +1,13 @@
 ﻿using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
-using house_dashboard_server.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
+using HouseDashboardServer.Models;
 
-namespace house_dashboard_server.Data
+namespace HouseDashboardServer.Data
 {
     public class WeatherStationReadingRepository
     {
@@ -23,16 +23,11 @@ namespace house_dashboard_server.Data
             _numberReadingFactory = new NumberReadingFactory();
         }
 
-        public async Task<ReadingSet<decimal>> GetReadingSet()
-        {
-            throw new NotImplementedException();
-        }
-
-        public async Task<NumberReading<decimal>> GetTemperatureReading(string stationId, TemperatureReadingType type)
+        public Task<NumberReading<decimal>> GetTemperatureReading(string stationId, TemperatureReadingType type)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
             
-            var queryResult = await
+            var queryResult = 
                 _dynamoTableQueryRunner.QueryOnTimestampRange(client,
                     tableName: "weather-station-readings",
                     partionKey: "station-id",
@@ -42,15 +37,15 @@ namespace house_dashboard_server.Data
             switch (type)
             {
                 case TemperatureReadingType.INSIDE:
-                    return PrepareInsideTempReading(queryResult);
+                    return PrepareInsideTempReading(queryResult.Result);
                 case TemperatureReadingType.OUTSIDE:
-                    return PrepareOutsideTempReading(queryResult);
+                    return PrepareOutsideTempReading(queryResult.Result);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, "Unknown temperature reading type");
             }
         }
 
-        private NumberReading<decimal> PrepareOutsideTempReading(List<Document> queryResult)
+        private Task<NumberReading<decimal>> PrepareOutsideTempReading(List<Document> queryResult)
         {
             var reducedScanResult = new List<DynamoDbItem<decimal>>();
 
@@ -70,7 +65,7 @@ namespace house_dashboard_server.Data
             return _numberReadingFactory.BuildReading("OutsideTemperature", reducedScanResult);
         }
 
-        private NumberReading<decimal> PrepareInsideTempReading(List<Document> queryResult)
+        private Task<NumberReading<decimal>> PrepareInsideTempReading(List<Document> queryResult)
         {
             List<DynamoDbItem<decimal>> reducedScanResult = new List<DynamoDbItem<decimal>>();
 

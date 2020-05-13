@@ -1,11 +1,10 @@
 using System.Threading.Tasks;
-using house_dashboard_server.Data;
-using house_dashboard_server.Factories;
-using house_dashboard_server.Models;
+using HouseDashboardServer.Factories;
+using HouseDashboardServer.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace house_dashboard_server
+namespace HouseDashboardServer
 {
     [ApiController]
     [Microsoft.AspNetCore.Components.Route("[controller]")]
@@ -20,7 +19,7 @@ namespace house_dashboard_server
 
         [EnableCors("default-policy")]
         [HttpGet]
-        public async Task<RainfallSummary> Get() 
-            => await _rainfallSummaryFactory.Build();
+        public Task<RainfallSummary> Get() 
+            => _rainfallSummaryFactory.Build();
     }
 }

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace house_dashboard_server.Data
+namespace HouseDashboardServer.Data
 {
     public class DynamoDbItem<T> : IDynamoDbItem<T>
     {

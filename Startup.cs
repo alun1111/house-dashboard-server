@@ -9,7 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 
-namespace house_dashboard_server
+namespace HouseDashboardServer
 {
     public class Startup
     {

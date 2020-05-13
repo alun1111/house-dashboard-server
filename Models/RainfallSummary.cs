@@ -1,4 +1,4 @@
-namespace house_dashboard_server.Models
+namespace HouseDashboardServer.Models
 {
     public class RainfallSummary
     {

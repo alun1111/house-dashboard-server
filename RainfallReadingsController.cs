@@ -1,10 +1,10 @@
 using System.Threading.Tasks;
-using house_dashboard_server.Data;
-using house_dashboard_server.Models;
+using HouseDashboardServer.Data;
+using HouseDashboardServer.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace house_dashboard_server
+namespace HouseDashboardServer
 {
     [ApiController]
     [Route("[controller]")]
@@ -18,13 +18,8 @@ namespace house_dashboard_server
         }
 
         [EnableCors("default-policy")]
-        [HttpGet]
-        public async Task<ReadingSet<decimal>> Get() 
-            => await _rainfallRepository.GetReadingSet();
-
-        [EnableCors("default-policy")]
         [HttpGet("{id}")]
-        public async Task<NumberReading<decimal>> Get(string id) 
-            => await _rainfallRepository.GetReading(id);
+        public Task<NumberReading<decimal>> Get(string id) 
+            => _rainfallRepository.GetReading(id);
     }
 }

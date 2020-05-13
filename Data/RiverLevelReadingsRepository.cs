@@ -1,13 +1,13 @@
 ﻿using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
-using house_dashboard_server.Models;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
+using HouseDashboardServer.Models;
 
-namespace house_dashboard_server.Data
+namespace HouseDashboardServer.Data
 {
     public class RiverLevelReadingsRepository
     {
@@ -23,26 +23,21 @@ namespace house_dashboard_server.Data
             _numberReadingFactory = new NumberReadingFactory();
         }
 
-        public async Task<ReadingSet<decimal>> GetReadingSet()
-        {
-            throw new NotImplementedException("No requirement for returning all at once yet");
-        }
-
-        public async Task<NumberReading<decimal>> GetReading(string stationId)
+        public Task<NumberReading<decimal>> GetReading(string stationId)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
-            var queryResult = await
+            var queryResult = 
                 _dynamoTableQueryRunner.QueryOnTimestampRange(client,
                     tableName: "river-level-readings",
                     partionKey: "monitoring-station-id",
                     partitionValue: stationId,
                     days: 3);
 
-            return PrepareRiverLevelReading(queryResult, stationId);
+            return PrepareRiverLevelReading(queryResult.Result, stationId);
         }
 
-        private NumberReading<decimal> PrepareRiverLevelReading(List<Document> queryResult, string stationId)
+        private Task<NumberReading<decimal>> PrepareRiverLevelReading(List<Document> queryResult, string stationId)
         {
             var reducedScanResult = new List<DynamoDbItem<decimal>>();
 

@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using house_dashboard_server.Data;
+using HouseDashboardServer.Data;
 using NUnit.Framework;
 
 namespace tests.Data

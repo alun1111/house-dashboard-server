@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using house_dashboard_server.Models;
+using HouseDashboardServer.Models;
 
-namespace house_dashboard_server.Factories
+namespace HouseDashboardServer.Factories
 {
     public class RainfallSummaryFactory : ISummaryFactory<RainfallSummary>
     {

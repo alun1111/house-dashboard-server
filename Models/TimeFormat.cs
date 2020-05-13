@@ -1,7 +1,7 @@
-namespace house_dashboard_server.Models
+namespace HouseDashboardServer.Models
 {
     public enum TimeFormat
     {
-        STRING, NUMBER
+        TIMESTRING, NUMBER
     }
 }
