@@ -33,7 +33,7 @@ namespace tests.Data
             };
             
             var result 
-                = this.systemUnderTest.BuildReading(measurementName, reducedScanResult);
+                = this.systemUnderTest.BuildReading(measurementName, reducedScanResult).Result;
         
             Assert.AreEqual(singleResult, result.Current);
             Assert.AreEqual(measurementName, result.Name);
@@ -64,7 +64,7 @@ namespace tests.Data
             };
             
             var result 
-                = this.systemUnderTest.BuildReading(measurementName, reducedScanResult);
+                = this.systemUnderTest.BuildReading(measurementName, reducedScanResult).Result;
 
             var recentResult = result.Recent.First();
         
