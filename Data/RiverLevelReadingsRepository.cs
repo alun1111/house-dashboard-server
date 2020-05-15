@@ -23,7 +23,7 @@ namespace HouseDashboardServer.Data
             _numberReadingFactory = new NumberReadingFactory();
         }
 
-        public async Task<NumberReading<decimal>> GetReading(string stationId)
+        public Task<NumberReading<decimal>> GetReading(string stationId)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
@@ -34,7 +34,7 @@ namespace HouseDashboardServer.Data
                     partitionValue: stationId,
                     days: 3);
 
-            return await PrepareRiverLevelReading(queryResult, stationId);
+            return PrepareRiverLevelReading(queryResult, stationId);
         }
 
         private async Task<NumberReading<decimal>> PrepareRiverLevelReading(Task<List<Document>> queryResult, string stationId)

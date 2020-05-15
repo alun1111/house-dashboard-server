@@ -19,7 +19,7 @@ namespace HouseDashboardServer
 
         [EnableCors("default-policy")]
         [HttpGet("{id}")]
-        public async Task<NumberReading<decimal>> Get(string id) 
-            => await _rainfallRepository.GetReading(id);
+        public Task<NumberReading<decimal>> Get(string id) 
+            => _rainfallRepository.GetReading(id);
     }
 }
