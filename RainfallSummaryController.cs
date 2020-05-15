@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace HouseDashboardServer
 {
     [ApiController]
-    [Microsoft.AspNetCore.Components.Route("[controller]")]
+    [Route("[controller]")]
     public class RainfallSummaryController : ControllerBase
     {
         private readonly ISummaryFactory<RainfallSummary> _rainfallSummaryFactory;

@@ -23,7 +23,7 @@ namespace HouseDashboardServer.Data
             _numberReadingFactory = new NumberReadingFactory();
         }
 
-        public Task<NumberReading<decimal>> GetTemperatureReading(string stationId, TemperatureReadingType type)
+        public async Task<NumberReading<decimal>> GetTemperatureReading(string stationId, TemperatureReadingType type)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
             
@@ -37,19 +37,19 @@ namespace HouseDashboardServer.Data
             switch (type)
             {
                 case TemperatureReadingType.INSIDE:
-                    return PrepareInsideTempReading(queryResult.Result);
+                    return await PrepareInsideTempReading(queryResult);
                 case TemperatureReadingType.OUTSIDE:
-                    return PrepareOutsideTempReading(queryResult.Result);
+                    return await PrepareOutsideTempReading(queryResult);
                 default:
                     throw new ArgumentOutOfRangeException(nameof(type), type, "Unknown temperature reading type");
             }
         }
 
-        private Task<NumberReading<decimal>> PrepareOutsideTempReading(List<Document> queryResult)
+        private async Task<NumberReading<decimal>> PrepareOutsideTempReading(Task<List<Document>> queryResult)
         {
             var reducedScanResult = new List<DynamoDbItem<decimal>>();
 
-            queryResult.ForEach((d) =>
+            foreach (var d in await queryResult)
             {
                 var temp = decimal.Parse(d["outside-temp"], _culture);
                 var convertedTemp = (temp - 32) * 5 / 9;
@@ -60,16 +60,16 @@ namespace HouseDashboardServer.Data
                 reducedScanResult.Add(new DynamoDbItem<decimal>(
                     readingDate, unixDateTime,convertedTemp
                     ));
-            });
+            }
 
             return _numberReadingFactory.BuildReading("OutsideTemperature", reducedScanResult);
         }
 
-        private Task<NumberReading<decimal>> PrepareInsideTempReading(List<Document> queryResult)
+        private async Task<NumberReading<decimal>> PrepareInsideTempReading(Task<List<Document>> queryResult)
         {
             List<DynamoDbItem<decimal>> reducedScanResult = new List<DynamoDbItem<decimal>>();
 
-            queryResult.ForEach((d) =>
+            foreach (var d in await queryResult)
             {
                 var temp = decimal.Parse(d["inside-temp"], _culture);
                 var convertedTemp = (temp - 32) * 5 / 9;
@@ -80,7 +80,7 @@ namespace HouseDashboardServer.Data
                 reducedScanResult.Add(new DynamoDbItem<decimal>(
                     readingDate, unixDateTime,convertedTemp
                     ));
-            });
+            }
 
             return _numberReadingFactory.BuildReading("InsideTemperature", reducedScanResult);
         }

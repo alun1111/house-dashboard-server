@@ -7,14 +7,14 @@ namespace HouseDashboardServer.Data
 {
     public class NumberReadingFactory
     {
-        public Task<NumberReading<decimal>> BuildReading(string measurementName, 
+        public NumberReading<decimal> BuildReading(string measurementName, 
             List<DynamoDbItem<decimal>> reducedScanResult)
         {
             var orderedScanResult 
                 = reducedScanResult.OrderBy(x => x.MeasurementTime);
             
             var latestMeasurement = orderedScanResult.LastOrDefault();
-            var reading =  new NumberReading<decimal>(
+            return new NumberReading<decimal>(
                                 name: measurementName,
                                 current: latestMeasurement,
                                 recent: orderedScanResult
@@ -25,11 +25,6 @@ namespace HouseDashboardServer.Data
                                             , s.Value) as IDynamoDbItem<decimal>)
                                     .ToList()
                                     );
-
-            return new Task<NumberReading<decimal>>(() =>
-            {
-                return reading;
-            });
         }
 
     }

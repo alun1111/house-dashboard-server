@@ -19,14 +19,14 @@ namespace HouseDashboardServer
 
         [EnableCors("default-policy")]
         [HttpGet("{id}/inside")]
-        public Task<NumberReading<decimal>> GetInside(string id) 
-            => _weatherReadingsRepository.GetTemperatureReading(id
+        public async Task<NumberReading<decimal>> GetInside(string id) 
+            => await _weatherReadingsRepository.GetTemperatureReading(id
                 , TemperatureReadingType.INSIDE);
 
         [EnableCors("default-policy")]
         [HttpGet("{id}/outside")]
-        public Task<NumberReading<decimal>> GetOutside(string id)
-            => _weatherReadingsRepository.GetTemperatureReading(id
+        public async Task<NumberReading<decimal>> GetOutside(string id)
+            => await _weatherReadingsRepository.GetTemperatureReading(id
                 , TemperatureReadingType.OUTSIDE);
     }
 }

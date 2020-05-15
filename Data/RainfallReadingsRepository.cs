@@ -23,7 +23,7 @@ namespace HouseDashboardServer.Data
             _numberReadingFactory = new NumberReadingFactory();
         }
 
-        public Task<NumberReading<decimal>> GetReading(string stationId)
+        public async Task<NumberReading<decimal>> GetReading(string stationId)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
@@ -34,14 +34,14 @@ namespace HouseDashboardServer.Data
                     partitionValue: stationId,
                     days: 3);
 
-            return PrepareRainfallReading(queryResult.Result, stationId);
+            return await PrepareRainfallReading(queryResult, stationId);
         }
 
-        private Task<NumberReading<decimal>> PrepareRainfallReading(List<Document> queryResult, string stationId)
+        private async Task<NumberReading<decimal>> PrepareRainfallReading(Task<List<Document>> queryResult, string stationId)
         {
             var reducedScanResult = new List<DynamoDbItem<decimal>>();
 
-            queryResult.ForEach((d) =>
+            foreach (var d in await queryResult)
             {
                 var depth = decimal.Parse(d["amount"], _culture);
                 var readingDate = DateTime.Parse(d["timestamp"], _culture);
@@ -51,7 +51,7 @@ namespace HouseDashboardServer.Data
                 reducedScanResult.Add(new DynamoDbItem<decimal>(
                     readingDate, unixDateTime, depth
                     ));
-            });
+            }
 
             return _numberReadingFactory.BuildReading(stationId, reducedScanResult);
         }
