@@ -5,6 +5,6 @@ namespace HouseDashboardServer.Factories
 {
     public interface ISummaryFactory<T>
     {
-        public Summary Build(string id);
+        public Summary Build();
     }
 }

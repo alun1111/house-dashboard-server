@@ -11,7 +11,7 @@ namespace HouseDashboardServer.Factories
         private RainfallReadingsRepository _rainfallReadingsRepository;
         private WeatherStationReadingRepository _weatherStationReadingsRepository;
         
-        private const string STATIONID = "WMR-89";
+        private const string STATIONID = "wmr-89";
         private const string RAINFALLSTATIONID = "14881";
 
         public SummaryFactory()
@@ -20,48 +20,56 @@ namespace HouseDashboardServer.Factories
             _rainfallReadingsRepository = new RainfallReadingsRepository();
         }
 
-        public Summary Build(string id)
+        public Summary Build()
         {
-            var summary = new Summary();
+            var rainfallSummary = new RainfallSummary();
+            var temperatureSummary = new TemperatureSummary();
             
-            Task.WaitAll(new []{
-                new Task(() => ApplyRainfallSummaries(summary)),
-                new Task(() => ApplyTemperatureSummaries(summary))
-                    });
+            Task.WaitAll(ApplyRainfallSummaries(rainfallSummary),
+                    ApplyTemperatureSummaries(temperatureSummary));
 
-            return summary;
+            return new Summary()
+            {
+                RainfallSummary = rainfallSummary,
+                TemperatureSummary = temperatureSummary
+            };
         }
 
-        private async void ApplyTemperatureSummaries(Summary summary)
+        private async Task ApplyTemperatureSummaries(TemperatureSummary temperatureSummary)
         {
             var temperature 
                 = await _weatherStationReadingsRepository
                     .GetTemperatureReading(STATIONID, TemperatureReadingType.OUTSIDE);
-            
-           var temperatureSummary = new TemperatureSummary();
-           
-           summary.TemperatureSummary = temperatureSummary;
+
+            var today = temperature
+                .Recent
+                .Where(m => m.MeasurementTime >= DateTime.Today);
+
+            if (today.Any())
+            {
+                temperatureSummary.HighToday = today.Max(v => v.Value);
+                temperatureSummary.LowToday = today.Min(v => v.Value);
+            }
         }
 
-        private async void ApplyRainfallSummaries(Summary summary)
+        private async Task ApplyRainfallSummaries(RainfallSummary rainfallSummary)
         {
             var rainfall 
                 = await _rainfallReadingsRepository.GetReading(RAINFALLSTATIONID);
 
-            var rainfallSummary = new RainfallSummary
+            rainfallSummary.LastThreeDays = rainfall
+                .Recent
+                .Sum(t => t.Value);
+
+            var today = rainfall
+                .Recent
+                .Where(m => m.MeasurementTime >= DateTime.Today);
+
+            if (today.Any())
             {
-                LastThreeDays = rainfall
-                    .Recent
-                    .Sum(t => t.Value),
-                RainToday = rainfall
-                    .Recent
-                    .Where(m => m.MeasurementTime >= DateTime.Today)
-                    .Sum(t => t.Value)
-            };
-
-
-
-            summary.RainfallSummary = rainfallSummary;
+                rainfallSummary.RainToday = today 
+                    .Sum(t => t.Value);
+            }
         }
     }
 }

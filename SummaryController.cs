@@ -18,9 +18,8 @@ namespace HouseDashboardServer
         }
 
         [EnableCors("default-policy")]
-        [HttpGet("{id}")]
         [HttpGet]
-        public async Task<Summary> Get(string id) 
-            => await _summaryFactory.Build(id);
+        public Summary Get() 
+            => _summaryFactory.Build();
     }
 }
