@@ -10,9 +10,10 @@ namespace HouseDashboardServer.Factories
     {
         private RainfallReadingsRepository _rainfallReadingsRepository;
         private WeatherStationReadingRepository _weatherStationReadingsRepository;
-        
+
         private const string STATIONID = "wmr-89";
         private const string RAINFALLSTATIONID = "14881";
+        private const string STATIONNAME = "WHITBURN";
 
         public SummaryFactory()
         {
@@ -25,8 +26,9 @@ namespace HouseDashboardServer.Factories
             var rainfallSummary = new RainfallSummary();
             var temperatureSummary = new TemperatureSummary();
             
-            Task.WaitAll(ApplyRainfallSummaries(rainfallSummary),
-                    ApplyTemperatureSummaries(temperatureSummary));
+            Task.WaitAll(
+                ApplyRainfallSummaries(rainfallSummary), 
+                ApplyTemperatureSummaries(temperatureSummary));
 
             return new Summary()
             {
@@ -45,10 +47,20 @@ namespace HouseDashboardServer.Factories
                 .Recent
                 .Where(m => m.MeasurementTime >= DateTime.Today);
 
+            var latest = today
+                .OrderByDescending(m => m.MeasurementTime)
+                .FirstOrDefault();
+
             if (today.Any())
             {
                 temperatureSummary.HighToday = today.Max(v => v.Value);
                 temperatureSummary.LowToday = today.Min(v => v.Value);
+                
+                if (latest != null)
+                {
+                    temperatureSummary.Latest = latest.Value;
+                    temperatureSummary.LatestMeasurementTime = latest.MeasurementTime;
+                }
             }
         }
 
@@ -67,6 +79,7 @@ namespace HouseDashboardServer.Factories
 
             if (today.Any())
             {
+                rainfallSummary.StationName = STATIONNAME; 
                 rainfallSummary.RainToday = today 
                     .Sum(t => t.Value);
             }
