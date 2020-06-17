@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using HouseDashboardServer.Data;
 using HouseDashboardServer.Models;
+using Microsoft.OpenApi.Extensions;
 
 namespace HouseDashboardServer.Factories
 {
@@ -53,6 +54,7 @@ namespace HouseDashboardServer.Factories
 
             if (today.Any())
             {
+                temperatureSummary.Location = TemperatureReadingType.OUTSIDE.ToString();
                 temperatureSummary.HighToday = today.Max(v => v.Value);
                 temperatureSummary.LowToday = today.Min(v => v.Value);
                 
