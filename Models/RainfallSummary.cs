@@ -1,10 +1,11 @@
 using System;
+using System.Collections.Generic;
 
 namespace HouseDashboardServer.Models
 {
     public class Summary
     {
-        public RainfallSummary RainfallSummary { get; set; }
+        public List<RainfallSummary> RainfallSummaries { get; set; }
         public TemperatureSummary TemperatureSummary { get; set; }
     }
     

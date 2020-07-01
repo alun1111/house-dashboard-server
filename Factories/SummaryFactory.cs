@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using HouseDashboardServer.Data;
@@ -24,16 +25,16 @@ namespace HouseDashboardServer.Factories
 
         public Summary Build()
         {
-            var rainfallSummary = new RainfallSummary();
+            var rainfallSummaries = new List<RainfallSummary>();
             var temperatureSummary = new TemperatureSummary();
             
             Task.WaitAll(
-                ApplyRainfallSummaries(rainfallSummary), 
+                ApplyRainfallSummaries(rainfallSummaries), 
                 ApplyTemperatureSummaries(temperatureSummary));
 
             return new Summary()
             {
-                RainfallSummary = rainfallSummary,
+                RainfallSummaries = rainfallSummaries,
                 TemperatureSummary = temperatureSummary
             };
         }
@@ -66,24 +67,37 @@ namespace HouseDashboardServer.Factories
             }
         }
 
-        private async Task ApplyRainfallSummaries(RainfallSummary rainfallSummary)
+        private async Task ApplyRainfallSummaries(List<RainfallSummary> rainfallSummaries)
         {
-            var rainfall 
-                = await _rainfallReadingsRepository.GetReading(RAINFALLSTATIONID);
-
-            rainfallSummary.LastThreeDays = rainfall
-                .Recent
-                .Sum(t => t.Value);
-
-            var today = rainfall
-                .Recent
-                .Where(m => m.MeasurementTime >= DateTime.Today);
-
-            if (today.Any())
+            var stations = new[] 
+                {("Whitburn", "14881"), 
+                    ("Harperrig", "15200"),
+                    ("Gogarbank", "15196")
+                };
+            
+            foreach (var s in stations)
             {
-                rainfallSummary.StationName = STATIONNAME; 
-                rainfallSummary.RainToday = today 
+                var rainfallSummary = new RainfallSummary();
+                
+                var rainfall 
+                    = await _rainfallReadingsRepository.GetReading(s.Item2);
+
+                rainfallSummary.LastThreeDays = rainfall
+                    .Recent
                     .Sum(t => t.Value);
+
+                var today = rainfall
+                    .Recent
+                    .Where(m => m.MeasurementTime >= DateTime.Today);
+
+                if (today.Any())
+                {
+                    rainfallSummary.StationName = s.Item1; 
+                    rainfallSummary.RainToday = today 
+                        .Sum(t => t.Value);
+                }
+                
+                rainfallSummaries.Add(rainfallSummary);
             }
         }
     }
