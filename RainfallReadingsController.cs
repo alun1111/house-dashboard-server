@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using HouseDashboardServer.Data;
 using HouseDashboardServer.Models;
@@ -19,7 +20,9 @@ namespace HouseDashboardServer
 
         [EnableCors("default-policy")]
         [HttpGet("{id}")]
-        public Task<NumberReading<decimal>> Get(string id) 
-            => _rainfallRepository.GetReading(id);
+        public Task<NumberReading<decimal>> Get(string id, DateTime dateFrom)
+        {
+           return _rainfallRepository.GetReading(id, dateFrom); 
+        }
     }
 }

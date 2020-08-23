@@ -25,14 +25,27 @@ namespace HouseDashboardServer.Data
 
         public Task<NumberReading<decimal>> GetReading(string stationId)
         {
+            return GetReading(stationId, DateTime.Today);
+        }
+
+        public Task<NumberReading<decimal>> GetReading(string stationId, DateTime dateFrom)
+        {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
+            
+            var days = 3;
+
+            if (dateFrom != DateTime.Today)
+            {
+                var ts = dateFrom.Subtract(DateTime.Today);
+                days = Math.Abs(ts.Days); // fromDate in future be damned
+            }
 
             var queryResult = 
                 _dynamoTableQueryRunner.QueryOnTimestampRange(client,
                     tableName: "rainfall-readings",
                     partionKey: "monitoring-station-id",
                     partitionValue: stationId,
-                    days: 3);
+                    days: days);
 
             return PrepareRainfallReading(queryResult, stationId);
         }
