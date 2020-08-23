@@ -10,11 +10,10 @@ namespace HouseDashboardServer.Utils
         {
             var days = DEFAULT_DAYS;
 
-            if (dateFrom != DateTime.Today)
-            {
-                var ts = dateFrom.Subtract(DateTime.Today);
-                days = Math.Abs(ts.Days); // fromDate in future be damned
-            }
+            if (dateFrom == default) return days;
+            
+            var ts = dateFrom.Subtract(DateTime.Today);
+            days = Math.Abs(ts.Days); // fromDate in future be damned
 
             return days;
         }
