@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using HouseDashboardServer.Models;
+using HouseDashboardServer.Utils;
 
 namespace HouseDashboardServer.Data
 {
@@ -22,8 +23,8 @@ namespace HouseDashboardServer.Data
             _dynamoTableQueryRunner = new DynamoTableQueryRunner();
             _numberReadingFactory = new NumberReadingFactory();
         }
-
-        public Task<NumberReading<decimal>> GetReading(string stationId)
+        
+        public Task<NumberReading<decimal>> GetReading(string stationId, DateTime dateFrom)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
@@ -32,7 +33,7 @@ namespace HouseDashboardServer.Data
                     tableName: "river-level-readings",
                     partionKey: "monitoring-station-id",
                     partitionValue: stationId,
-                    days: 3);
+                    days: DaysCalculator.DaysSinceDateFrom(dateFrom));
 
             return PrepareRiverLevelReading(queryResult, stationId);
         }

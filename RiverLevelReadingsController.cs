@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Cors;
+﻿using System;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using HouseDashboardServer.Data;
@@ -19,7 +20,7 @@ namespace HouseDashboardServer
 
         [EnableCors("default-policy")]
         [HttpGet("{id}")]
-        public Task<NumberReading<decimal>> Get(string id) 
-            => _readingSetRepository.GetReading(id);
+        public Task<NumberReading<decimal>> Get(string id, DateTime dateFrom) 
+            => _readingSetRepository.GetReading(id, dateFrom);
     }
 }

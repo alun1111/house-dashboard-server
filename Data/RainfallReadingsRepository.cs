@@ -6,12 +6,13 @@ using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using HouseDashboardServer.Models;
+using HouseDashboardServer.Utils;
 
 namespace HouseDashboardServer.Data
 {
     public class RainfallReadingsRepository
     {
-        private readonly IFormatProvider _culture 
+        private readonly IFormatProvider _culture
             = CultureInfo.CreateSpecificCulture("en-GB");
 
         private readonly DynamoTableQueryRunner _dynamoTableQueryRunner;
@@ -31,26 +32,20 @@ namespace HouseDashboardServer.Data
         public Task<NumberReading<decimal>> GetReading(string stationId, DateTime dateFrom)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
-            
-            var days = 3;
 
-            if (dateFrom != DateTime.Today)
-            {
-                var ts = dateFrom.Subtract(DateTime.Today);
-                days = Math.Abs(ts.Days); // fromDate in future be damned
-            }
-
-            var queryResult = 
+            var queryResult =
                 _dynamoTableQueryRunner.QueryOnTimestampRange(client,
                     tableName: "rainfall-readings",
                     partionKey: "monitoring-station-id",
                     partitionValue: stationId,
-                    days: days);
+                    days: DaysCalculator.DaysSinceDateFrom(dateFrom));
 
             return PrepareRainfallReading(queryResult, stationId);
         }
 
-        private async Task<NumberReading<decimal>> PrepareRainfallReading(Task<List<Document>> queryResult, string stationId)
+
+        private async Task<NumberReading<decimal>> PrepareRainfallReading(Task<List<Document>> queryResult,
+            string stationId)
         {
             var reducedScanResult = new List<DynamoDbItem<decimal>>();
 
@@ -60,10 +55,10 @@ namespace HouseDashboardServer.Data
                 var readingDate = DateTime.Parse(d["timestamp"], _culture);
                 var dateTimeOffset = new DateTimeOffset(readingDate);
                 var unixDateTime = dateTimeOffset.ToUnixTimeSeconds();
-                
+
                 reducedScanResult.Add(new DynamoDbItem<decimal>(
                     readingDate, unixDateTime, depth
-                    ));
+                ));
             }
 
             return _numberReadingFactory.BuildReading(stationId, reducedScanResult);
