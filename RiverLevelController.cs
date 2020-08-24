@@ -9,11 +9,11 @@ namespace HouseDashboardServer
 {
     [ApiController]
     [Route("[controller]")]
-    public class RiverLevelReadingsController : ControllerBase
+    public class RiverLevelController : ControllerBase
     {
         private readonly RiverLevelReadingsRepository _readingSetRepository;
 
-        public RiverLevelReadingsController()
+        public RiverLevelController()
         {
             _readingSetRepository = new RiverLevelReadingsRepository();
         }

@@ -8,11 +8,11 @@ namespace HouseDashboardServer
 {
     [ApiController]
     [Route("[controller]")]
-    public class TemperatureReadingsController : ControllerBase
+    public class TemperatureController : ControllerBase
     {
         private readonly WeatherStationReadingRepository _weatherReadingsRepository;
 
-        public TemperatureReadingsController()
+        public TemperatureController()
         {
             _weatherReadingsRepository = new WeatherStationReadingRepository();
         }
