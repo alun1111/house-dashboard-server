@@ -8,7 +8,7 @@ namespace HouseDashboardServer.Data
     public class NumberReadingFactory
     {
         public NumberReading<decimal> BuildReading(string measurementName, 
-            List<DynamoDbItem<decimal>> reducedScanResult)
+            List<IDynamoDbItem<decimal>> reducedScanResult)
         {
             var orderedScanResult 
                 = reducedScanResult.OrderBy(x => x.MeasurementTime);

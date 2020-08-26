@@ -40,7 +40,7 @@ namespace HouseDashboardServer.Data
 
         private async Task<NumberReading<decimal>> PrepareRiverLevelReading(Task<List<Document>> queryResult, string stationId)
         {
-            var reducedScanResult = new List<DynamoDbItem<decimal>>();
+            var reducedScanResult = new List<IDynamoDbItem<decimal>>();
             
             foreach (var d in await queryResult)
             {

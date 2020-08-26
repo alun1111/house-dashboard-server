@@ -47,7 +47,7 @@ namespace HouseDashboardServer.Data
 
         private async Task<NumberReading<decimal>> PrepareOutsideTempReading(Task<List<Document>> queryResult)
         {
-            var reducedScanResult = new List<DynamoDbItem<decimal>>();
+            var reducedScanResult = new List<IDynamoDbItem<decimal>>();
 
             foreach (var d in await queryResult)
             {
@@ -67,7 +67,7 @@ namespace HouseDashboardServer.Data
 
         private async Task<NumberReading<decimal>> PrepareInsideTempReading(Task<List<Document>> queryResult)
         {
-            List<DynamoDbItem<decimal>> reducedScanResult = new List<DynamoDbItem<decimal>>();
+            List<IDynamoDbItem<decimal>> reducedScanResult = new List<IDynamoDbItem<decimal>>();
 
             foreach (var d in await queryResult)
             {
