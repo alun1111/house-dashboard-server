@@ -24,12 +24,7 @@ namespace HouseDashboardServer.Data
             _numberReadingFactory = new NumberReadingFactory();
         }
 
-        public Task<NumberReading<decimal>> GetReading(string stationId)
-        {
-            return GetReading(stationId, DateTime.Today);
-        }
-
-        public Task<NumberReading<decimal>> GetReading(string stationId, DateTime dateFrom)
+        public Task<NumberReading<decimal>> GetReading(string stationId, DateTime dateFrom = default)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
 
