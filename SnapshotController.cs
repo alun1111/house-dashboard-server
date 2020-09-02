@@ -22,7 +22,7 @@ namespace HouseDashboardServer
         // GET
         [EnableCors("default-policy")]
         [HttpGet]
-        public IEnumerable<Snapshot> Get()
+        public Dictionary<string, HashSet<SnapshotItem>> Get()
             => _snapshotRangeFactory.Build();
     }
 }

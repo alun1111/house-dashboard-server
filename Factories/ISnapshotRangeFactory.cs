@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using HouseDashboardServer.Models;
 
@@ -5,6 +6,6 @@ namespace HouseDashboardServer.Factories
 {
     public interface ISnapshotRangeFactory
     {
-        public IEnumerable<Snapshot> Build();
+        public Dictionary<string, HashSet<SnapshotItem>> Build();
     }
 }
