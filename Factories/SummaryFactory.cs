@@ -4,12 +4,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using HouseDashboardServer.Data;
 using HouseDashboardServer.Models;
+using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Extensions;
 
 namespace HouseDashboardServer.Factories
 {
     public class SummaryFactory : ISummaryFactory<Summary>
     {
+        private readonly ILogger<SummaryFactory> _logger;
         private RainfallReadingsRepository _rainfallReadingsRepository;
         private WeatherStationReadingRepository _weatherStationReadingsRepository;
 
@@ -19,12 +21,15 @@ namespace HouseDashboardServer.Factories
 
         public SummaryFactory()
         {
+            _logger = new Logger<SummaryFactory>(new LoggerFactory());
             _weatherStationReadingsRepository = new WeatherStationReadingRepository();
             _rainfallReadingsRepository = new RainfallReadingsRepository();
         }
 
         public Summary Build()
         {
+            _logger.Log(LogLevel.Information, "Building summary...");
+            
             var rainfallSummaries = new List<RainfallSummary>();
             var temperatureSummary = new TemperatureSummary();
             

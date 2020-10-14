@@ -13,7 +13,18 @@ namespace HouseDashboardServer
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            CreateHostBuilder(args)
+                .ConfigureLogging(logging =>
+                {
+                    logging.AddAWSProvider();
+
+                    // When you need logging below set the minimum level.
+                    // Otherwise the logging framework will default to
+                    // Informational for external providers.
+                    logging.SetMinimumLevel(LogLevel.Debug);
+                })
+                .Build()
+                .Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
