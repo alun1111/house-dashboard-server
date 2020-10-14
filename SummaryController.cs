@@ -12,9 +12,9 @@ namespace HouseDashboardServer
     {
         private readonly ISummaryFactory<Summary> _summaryFactory;
 
-        public SummaryController()
+        public SummaryController(ISummaryFactory<Summary> summaryFactory)
         {
-            _summaryFactory = new SummaryFactory();
+            _summaryFactory = summaryFactory;
         }
 
         [EnableCors("default-policy")]

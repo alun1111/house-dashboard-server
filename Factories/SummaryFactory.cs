@@ -19,9 +19,9 @@ namespace HouseDashboardServer.Factories
         private const string RAINFALLSTATIONID = "14881";
         private const string STATIONNAME = "WHITBURN";
 
-        public SummaryFactory()
+        public SummaryFactory(ILogger<SummaryFactory> logger)
         {
-            _logger = new Logger<SummaryFactory>(new LoggerFactory());
+            _logger = logger;
             _weatherStationReadingsRepository = new WeatherStationReadingRepository();
             _rainfallReadingsRepository = new RainfallReadingsRepository();
         }
