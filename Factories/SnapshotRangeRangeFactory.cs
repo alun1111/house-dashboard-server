@@ -27,10 +27,10 @@ namespace HouseDashboardServer.Factories
         {
             var output = new Dictionary<string, HashSet<SnapshotItem>>();
             
-            Task<List<IDynamoDbItem<decimal>>> rainfallLevels 
-                = _rainfallReadingsRepository.GetReadingItems("14881");
+            Task<List<IMeasurement<decimal>>> rainfallLevels 
+                = _rainfallReadingsRepository.GetMeasurements("14881");
             
-            Task<List<IDynamoDbItem<decimal>>> riverLevels 
+            Task<List<IMeasurement<decimal>>> riverLevels 
                 = _riverLevelsRepository.GetReadingItems("14881-SG");
 
             Task.WaitAll(rainfallLevels, riverLevels);
@@ -41,7 +41,7 @@ namespace HouseDashboardServer.Factories
             return output;
         }
 
-        private void TryAddSnapshotItem(List<IDynamoDbItem<decimal>> dynamoResult, 
+        private void TryAddSnapshotItem(List<IMeasurement<decimal>> dynamoResult, 
             Dictionary<string, HashSet<SnapshotItem>> output,
             string label)
         {
@@ -61,7 +61,7 @@ namespace HouseDashboardServer.Factories
             }
         }
 
-        private static string RoundedTime(IDynamoDbItem<decimal> r)
+        private static string RoundedTime(IMeasurement<decimal> r)
         {
             var roundedTime = new DateTime(r.MeasurementTime.Year,
                 r.MeasurementTime.Month,

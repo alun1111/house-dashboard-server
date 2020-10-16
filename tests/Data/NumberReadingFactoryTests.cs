@@ -22,12 +22,12 @@ namespace tests.Data
             string measurementName = "Inside Temperature";
 
             var singleResult 
-                = new DynamoDbItem<decimal>(
+                = new Measurement<decimal>(
                     new DateTime(2020, 01, 01)
                     , 1234567
                     , 45);
             
-            var reducedScanResult = new List<DynamoDbItem<decimal>>()
+            var reducedScanResult = new List<Measurement<decimal>>()
             {
                 singleResult
             };
@@ -46,18 +46,18 @@ namespace tests.Data
             string measurementName = "Inside Temperature";
 
             var yesterday 
-                = new DynamoDbItem<decimal>(
+                = new Measurement<decimal>(
                     new DateTime(2020, 01, 01)
                     ,1577836800 
                     , 45);
             
             var today 
-                = new DynamoDbItem<decimal>(
+                = new Measurement<decimal>(
                     new DateTime(2020, 01, 02)
                     ,1577923200 
                     , 46);
             
-            var reducedScanResult = new List<DynamoDbItem<decimal>>()
+            var reducedScanResult = new List<Measurement<decimal>>()
             {
                 today,
                 yesterday

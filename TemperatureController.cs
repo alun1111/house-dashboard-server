@@ -19,13 +19,13 @@ namespace HouseDashboardServer
 
         [EnableCors("default-policy")]
         [HttpGet("{id}/inside")]
-        public Task<NumberReading<decimal>> GetInside(string id) 
+        public Task<Reading<decimal>> GetInside(string id) 
             => _weatherReadingsRepository.GetTemperatureReading(id
                 , TemperatureReadingType.INSIDE);
 
         [EnableCors("default-policy")]
         [HttpGet("{id}/outside")]
-        public Task<NumberReading<decimal>> GetOutside(string id)
+        public Task<Reading<decimal>> GetOutside(string id)
             => _weatherReadingsRepository.GetTemperatureReading(id
                 , TemperatureReadingType.OUTSIDE);
     }

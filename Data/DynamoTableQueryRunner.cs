@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
+using Amazon;
 
 namespace HouseDashboardServer.Data
 {
@@ -13,12 +14,13 @@ namespace HouseDashboardServer.Data
         private readonly IFormatProvider _culture 
             = CultureInfo.CreateSpecificCulture("en-GB");
 
-        public Task<List<Document>> QueryOnTimestampRange(AmazonDynamoDBClient client,
-                                                                     string tableName,
-                                                                     string partionKey,
-                                                                     string partitionValue,
-                                                                     int days)
+        public Task<List<Document>> QueryOnTimestampRange(string tableName,
+                                                             string partionKey,
+                                                             string partitionValue,
+                                                             int days)
         {
+            using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
+            
             var table = Table.LoadTable(client, tableName);
 
             var queryFilter = 

@@ -2,9 +2,9 @@
 
 namespace HouseDashboardServer.Data
 {
-    public class DynamoDbItem<T> : IDynamoDbItem<T>
+    public class Measurement<T> : IMeasurement<T>
     {
-        public DynamoDbItem(DateTime measurementTime, long timeIndex, T value)
+        public Measurement(DateTime measurementTime, long timeIndex, T value)
         {
             MeasurementTime = measurementTime;
             TimeIndex = timeIndex;

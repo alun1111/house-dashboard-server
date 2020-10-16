@@ -2,7 +2,7 @@
 
 namespace HouseDashboardServer.Data
 {
-    public interface IDynamoDbItem<T>
+    public interface IMeasurement<T>
     {
         DateTime MeasurementTime { get; }
         long TimeIndex { get; }

@@ -23,12 +23,11 @@ namespace HouseDashboardServer.Data
             _numberReadingFactory = new NumberReadingFactory();
         }
 
-        public Task<NumberReading<decimal>> GetTemperatureReading(string stationId, TemperatureReadingType type)
+        public Task<Reading<decimal>> GetTemperatureReading(string stationId, TemperatureReadingType type)
         {
-            using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
             
             var queryResult = 
-                _dynamoTableQueryRunner.QueryOnTimestampRange(client,
+                _dynamoTableQueryRunner.QueryOnTimestampRange(
                     tableName: "weather-station-readings",
                     partionKey: "station-id",
                     partitionValue: stationId,
@@ -45,9 +44,9 @@ namespace HouseDashboardServer.Data
             }
         }
 
-        private async Task<NumberReading<decimal>> PrepareOutsideTempReading(Task<List<Document>> queryResult)
+        private async Task<Reading<decimal>> PrepareOutsideTempReading(Task<List<Document>> queryResult)
         {
-            var reducedScanResult = new List<IDynamoDbItem<decimal>>();
+            var reducedScanResult = new List<IMeasurement<decimal>>();
 
             foreach (var d in await queryResult)
             {
@@ -57,7 +56,7 @@ namespace HouseDashboardServer.Data
                 var dateTimeOffset = new DateTimeOffset(readingDate);
                 var unixDateTime = dateTimeOffset.ToUnixTimeSeconds();
                 
-                reducedScanResult.Add(new DynamoDbItem<decimal>(
+                reducedScanResult.Add(new Measurement<decimal>(
                     readingDate, unixDateTime,convertedTemp
                     ));
             }
@@ -65,9 +64,9 @@ namespace HouseDashboardServer.Data
             return _numberReadingFactory.BuildReading("OutsideTemperature", reducedScanResult);
         }
 
-        private async Task<NumberReading<decimal>> PrepareInsideTempReading(Task<List<Document>> queryResult)
+        private async Task<Reading<decimal>> PrepareInsideTempReading(Task<List<Document>> queryResult)
         {
-            List<IDynamoDbItem<decimal>> reducedScanResult = new List<IDynamoDbItem<decimal>>();
+            List<IMeasurement<decimal>> reducedScanResult = new List<IMeasurement<decimal>>();
 
             foreach (var d in await queryResult)
             {
@@ -77,7 +76,7 @@ namespace HouseDashboardServer.Data
                 var dateTimeOffset = new DateTimeOffset(readingDate);
                 var unixDateTime = dateTimeOffset.ToUnixTimeSeconds();
                 
-                reducedScanResult.Add(new DynamoDbItem<decimal>(
+                reducedScanResult.Add(new Measurement<decimal>(
                     readingDate, unixDateTime,convertedTemp
                     ));
             }

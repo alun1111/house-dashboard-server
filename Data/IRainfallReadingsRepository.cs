@@ -7,7 +7,7 @@ namespace HouseDashboardServer.Data
 {
     public interface IRainfallReadingsRepository
     {
-        Task<NumberReading<decimal>> GetReading(string stationId, DateTime dateFrom = default);
-        Task<List<IDynamoDbItem<decimal>>> GetReadingItems(string stationId, DateTime dateFrom = default);
+        Task<Reading<decimal>> GetReading(string stationId, DateTime dateFrom = default);
+        Task<List<IMeasurement<decimal>>> GetMeasurements(string stationId, DateTime dateFrom = default);
     }
 }

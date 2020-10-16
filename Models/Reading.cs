@@ -3,9 +3,9 @@ using HouseDashboardServer.Data;
 
 namespace HouseDashboardServer.Models
 {
-    public class NumberReading<T>
+    public class Reading<T> 
     {
-        public NumberReading(string name, IDynamoDbItem<T> current, List<IDynamoDbItem<T>> recent)
+        public Reading(string name, IMeasurement<T> current, List<IMeasurement<T>> recent)
         {
             Name = name;
             Current = current;
@@ -13,7 +13,7 @@ namespace HouseDashboardServer.Models
         }
 
         public string Name { get; }
-        public IDynamoDbItem<T> Current { get; }
-        public List<IDynamoDbItem<T>> Recent { get; }
+        public IMeasurement<T> Current { get; }
+        public List<IMeasurement<T>> Recent { get; }
     }
 }

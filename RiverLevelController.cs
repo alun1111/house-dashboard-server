@@ -20,7 +20,7 @@ namespace HouseDashboardServer
 
         [EnableCors("default-policy")]
         [HttpGet("{id}")]
-        public Task<NumberReading<decimal>> Get(string id, DateTime dateFrom) 
+        public Task<Reading<decimal>> Get(string id, DateTime dateFrom) 
             => _readingSetRepository.GetReading(id, dateFrom);
     }
 }

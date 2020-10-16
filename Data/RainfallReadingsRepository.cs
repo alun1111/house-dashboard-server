@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
-using Amazon;
-using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using HouseDashboardServer.Models;
 using HouseDashboardServer.Utils;
@@ -28,12 +26,10 @@ namespace HouseDashboardServer.Data
             _numberReadingFactory = new NumberReadingFactory();
         }
 
-        public Task<NumberReading<decimal>> GetReading(string stationId, DateTime dateFrom = default)
+        public Task<Reading<decimal>> GetReading(string stationId, DateTime dateFrom = default)
         {
-            using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
-            
             var queryResult =
-                _dynamoTableQueryRunner.QueryOnTimestampRange(client,
+                _dynamoTableQueryRunner.QueryOnTimestampRange(
                     tableName: "rainfall-readings",
                     partionKey: "monitoring-station-id",
                     partitionValue: stationId,
@@ -42,12 +38,10 @@ namespace HouseDashboardServer.Data
             return PrepareRainfallReading(queryResult, stationId);
         }
         
-        public Task<List<IDynamoDbItem<decimal>>> GetReadingItems(string stationId, DateTime dateFrom = default)
+        public Task<List<IMeasurement<decimal>>> GetMeasurements(string stationId, DateTime dateFrom = default)
         {
-            using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
-
             var queryResult =
-                _dynamoTableQueryRunner.QueryOnTimestampRange(client,
+                _dynamoTableQueryRunner.QueryOnTimestampRange(
                     tableName: "rainfall-readings",
                     partionKey: "monitoring-station-id",
                     partitionValue: stationId,
@@ -57,7 +51,7 @@ namespace HouseDashboardServer.Data
         }
 
 
-        private async Task<NumberReading<decimal>> PrepareRainfallReading(Task<List<Document>> queryResult,
+        private async Task<Reading<decimal>> PrepareRainfallReading(Task<List<Document>> queryResult,
             string stationId)
         {
             var reducedScanResult = await GetReducedScanResult(queryResult); 
@@ -65,9 +59,9 @@ namespace HouseDashboardServer.Data
             return _numberReadingFactory.BuildReading(stationId, reducedScanResult);
         }
 
-        private async Task<List<IDynamoDbItem<decimal>>> GetReducedScanResult(Task<List<Document>> queryResult)
+        private async Task<List<IMeasurement<decimal>>> GetReducedScanResult(Task<List<Document>> queryResult)
         {
-            var reducedScanResult = new List<IDynamoDbItem<decimal>>();
+            var reducedScanResult = new List<IMeasurement<decimal>>();
             
             _logger.Log(LogLevel.Debug, "Starting querying rainfall data");
 
@@ -78,7 +72,7 @@ namespace HouseDashboardServer.Data
                 var dateTimeOffset = new DateTimeOffset(readingDate);
                 var unixDateTime = dateTimeOffset.ToUnixTimeSeconds();
 
-                reducedScanResult.Add(new DynamoDbItem<decimal>(
+                reducedScanResult.Add(new Measurement<decimal>(
                     readingDate, unixDateTime, depth
                 ));
             }

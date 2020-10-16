@@ -24,12 +24,10 @@ namespace HouseDashboardServer.Data
             _numberReadingFactory = new NumberReadingFactory();
         }
         
-        public Task<NumberReading<decimal>> GetReading(string stationId, DateTime dateFrom = default)
+        public Task<Reading<decimal>> GetReading(string stationId, DateTime dateFrom = default)
         {
-            using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
-
             var queryResult = 
-                _dynamoTableQueryRunner.QueryOnTimestampRange(client,
+                _dynamoTableQueryRunner.QueryOnTimestampRange(
                     tableName: "river-level-readings",
                     partionKey: "monitoring-station-id",
                     partitionValue: stationId,
@@ -38,12 +36,10 @@ namespace HouseDashboardServer.Data
             return PrepareRiverLevelReading(queryResult, stationId);
         }
 
-        public Task<List<IDynamoDbItem<decimal>>> GetReadingItems(string stationId, DateTime dateFrom = default)
+        public Task<List<IMeasurement<decimal>>> GetReadingItems(string stationId, DateTime dateFrom = default)
         {
-            using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
-
             var queryResult =
-                _dynamoTableQueryRunner.QueryOnTimestampRange(client,
+                _dynamoTableQueryRunner.QueryOnTimestampRange(
                     tableName: "river-level-readings",
                     partionKey: "monitoring-station-id",
                     partitionValue: stationId,
@@ -52,16 +48,16 @@ namespace HouseDashboardServer.Data
             return GetReducedScanResult(queryResult); 
         }
         
-        private async Task<NumberReading<decimal>> PrepareRiverLevelReading(Task<List<Document>> queryResult, string stationId)
+        private async Task<Reading<decimal>> PrepareRiverLevelReading(Task<List<Document>> queryResult, string stationId)
         {
             var reducedScanResult = await GetReducedScanResult(queryResult); 
 
             return _numberReadingFactory.BuildReading(stationId, reducedScanResult);
         }
         
-        private async Task<List<IDynamoDbItem<decimal>>> GetReducedScanResult(Task<List<Document>> queryResult)
+        private async Task<List<IMeasurement<decimal>>> GetReducedScanResult(Task<List<Document>> queryResult)
         {
-            var reducedScanResult = new List<IDynamoDbItem<decimal>>();
+            var reducedScanResult = new List<IMeasurement<decimal>>();
             
             foreach (var d in await queryResult)
             {
@@ -70,7 +66,7 @@ namespace HouseDashboardServer.Data
                 var dateTimeOffset = new DateTimeOffset(readingDate);
                 var unixDateTime = dateTimeOffset.ToUnixTimeSeconds();
 
-                reducedScanResult.Add(new DynamoDbItem<decimal>(
+                reducedScanResult.Add(new Measurement<decimal>(
                     readingDate, unixDateTime, depth
                 ));
             }
