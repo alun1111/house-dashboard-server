@@ -9,18 +9,16 @@ using HouseDashboardServer.Models;
 
 namespace HouseDashboardServer.Data
 {
-    public class WeatherStationReadingRepository
+    public class WeatherStationReadingRepository : IWeatherStationReadingRepository
     {
+        private readonly IDynamoTableQueryRunner _dynamoTableQueryRunner;
+
         private readonly IFormatProvider _culture 
             = CultureInfo.CreateSpecificCulture("en-GB");
 
-        private readonly DynamoTableQueryRunner _dynamoTableQueryRunner;
-        private readonly NumberReadingFactory _numberReadingFactory;
-
-        public WeatherStationReadingRepository()
+        public WeatherStationReadingRepository(IDynamoTableQueryRunner dynamoTableQueryRunner)
         {
-            _dynamoTableQueryRunner = new DynamoTableQueryRunner();
-            _numberReadingFactory = new NumberReadingFactory();
+            _dynamoTableQueryRunner = dynamoTableQueryRunner;
         }
 
         public Task<Reading<decimal>> GetTemperatureReading(string stationId, TemperatureReadingType type)
@@ -61,7 +59,7 @@ namespace HouseDashboardServer.Data
                     ));
             }
 
-            return _numberReadingFactory.BuildReading("OutsideTemperature", reducedScanResult);
+            return ReadingFactory.BuildReading("OutsideTemperature", reducedScanResult);
         }
 
         private async Task<Reading<decimal>> PrepareInsideTempReading(Task<List<Document>> queryResult)
@@ -81,7 +79,7 @@ namespace HouseDashboardServer.Data
                     ));
             }
 
-            return _numberReadingFactory.BuildReading("InsideTemperature", reducedScanResult);
+            return ReadingFactory.BuildReading("InsideTemperature", reducedScanResult);
         }
     }
 }

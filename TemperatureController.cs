@@ -10,23 +10,23 @@ namespace HouseDashboardServer
     [Route("[controller]")]
     public class TemperatureController : ControllerBase
     {
-        private readonly WeatherStationReadingRepository _weatherReadingsRepository;
+        private readonly IWeatherStationReadingRepository _weatherStationReadingRepository;
 
-        public TemperatureController()
+        public TemperatureController(IWeatherStationReadingRepository weatherStationReadingRepository)
         {
-            _weatherReadingsRepository = new WeatherStationReadingRepository();
+            _weatherStationReadingRepository = weatherStationReadingRepository;
         }
 
         [EnableCors("default-policy")]
         [HttpGet("{id}/inside")]
         public Task<Reading<decimal>> GetInside(string id) 
-            => _weatherReadingsRepository.GetTemperatureReading(id
+            => _weatherStationReadingRepository.GetTemperatureReading(id
                 , TemperatureReadingType.INSIDE);
 
         [EnableCors("default-policy")]
         [HttpGet("{id}/outside")]
         public Task<Reading<decimal>> GetOutside(string id)
-            => _weatherReadingsRepository.GetTemperatureReading(id
+            => _weatherStationReadingRepository.GetTemperatureReading(id
                 , TemperatureReadingType.OUTSIDE);
     }
 }

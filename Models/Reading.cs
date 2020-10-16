@@ -3,6 +3,10 @@ using HouseDashboardServer.Data;
 
 namespace HouseDashboardServer.Models
 {
+    /// <summary>
+    /// A reading is a collection of measurements from a particular source (i.e. station)
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class Reading<T> 
     {
         public Reading(string name, IMeasurement<T> current, List<IMeasurement<T>> recent)

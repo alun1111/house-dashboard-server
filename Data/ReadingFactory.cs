@@ -5,9 +5,9 @@ using HouseDashboardServer.Models;
 
 namespace HouseDashboardServer.Data
 {
-    public class NumberReadingFactory
+    public class ReadingFactory
     {
-        public Reading<decimal> BuildReading(string measurementName, 
+        public static Reading<decimal> BuildReading(string measurementName, 
             List<IMeasurement<decimal>> reducedScanResult)
         {
             var orderedScanResult 

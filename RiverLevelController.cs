@@ -11,16 +11,16 @@ namespace HouseDashboardServer
     [Route("[controller]")]
     public class RiverLevelController : ControllerBase
     {
-        private readonly RiverLevelReadingsRepository _readingSetRepository;
+        private readonly IRiverLevelReadingsRepository _riverLevelReadingsRepository;
 
-        public RiverLevelController()
+        public RiverLevelController(IRiverLevelReadingsRepository riverLevelReadingsRepository)
         {
-            _readingSetRepository = new RiverLevelReadingsRepository();
+            _riverLevelReadingsRepository = riverLevelReadingsRepository;
         }
 
         [EnableCors("default-policy")]
         [HttpGet("{id}")]
         public Task<Reading<decimal>> Get(string id, DateTime dateFrom) 
-            => _readingSetRepository.GetReading(id, dateFrom);
+            => _riverLevelReadingsRepository.GetReading(id, dateFrom);
     }
 }

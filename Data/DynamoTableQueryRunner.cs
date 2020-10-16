@@ -8,7 +8,7 @@ using Amazon;
 
 namespace HouseDashboardServer.Data
 {
-    public class DynamoTableQueryRunner
+    public class DynamoTableQueryRunner : IDynamoTableQueryRunner
     {
 
         private readonly IFormatProvider _culture 

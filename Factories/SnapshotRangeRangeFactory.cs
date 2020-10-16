@@ -11,16 +11,16 @@ namespace HouseDashboardServer.Factories
     public class SnapshotRangeRangeFactory : ISnapshotRangeFactory
     {
         private readonly IRainfallReadingsRepository _rainfallReadingsRepository;
+        private readonly IRiverLevelReadingsRepository _riverLevelReadingsRepository;
 
         private readonly IFormatProvider _culture 
             = CultureInfo.CreateSpecificCulture("en-GB");
 
-        private readonly RiverLevelReadingsRepository _riverLevelsRepository;
-
-        public SnapshotRangeRangeFactory(IRainfallReadingsRepository rainfallReadingsRepository)
+        public SnapshotRangeRangeFactory(IRainfallReadingsRepository rainfallReadingsRepository
+            ,IRiverLevelReadingsRepository riverLevelReadingsRepository)
         {
             _rainfallReadingsRepository = rainfallReadingsRepository;
-            _riverLevelsRepository = new RiverLevelReadingsRepository();
+            _riverLevelReadingsRepository = riverLevelReadingsRepository;
         }
 
         public Dictionary<string, HashSet<SnapshotItem>> Build()
@@ -31,7 +31,7 @@ namespace HouseDashboardServer.Factories
                 = _rainfallReadingsRepository.GetMeasurements("14881");
             
             Task<List<IMeasurement<decimal>>> riverLevels 
-                = _riverLevelsRepository.GetReadingItems("14881-SG");
+                = _riverLevelReadingsRepository.GetReadingItems("14881-SG");
 
             Task.WaitAll(rainfallLevels, riverLevels);
 

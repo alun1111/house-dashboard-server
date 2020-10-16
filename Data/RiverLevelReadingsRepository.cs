@@ -10,18 +10,17 @@ using HouseDashboardServer.Utils;
 
 namespace HouseDashboardServer.Data
 {
-    public class RiverLevelReadingsRepository
+    public class RiverLevelReadingsRepository : IRiverLevelReadingsRepository
     {
+        private readonly IDynamoTableQueryRunner _dynamoTableQueryRunner;
+
         private readonly IFormatProvider _culture 
             = CultureInfo.CreateSpecificCulture("en-GB");
 
-        private readonly DynamoTableQueryRunner _dynamoTableQueryRunner;
-        private readonly NumberReadingFactory _numberReadingFactory;
 
-        public RiverLevelReadingsRepository()
+        public RiverLevelReadingsRepository(IDynamoTableQueryRunner dynamoTableQueryRunner)
         {
-            _dynamoTableQueryRunner = new DynamoTableQueryRunner();
-            _numberReadingFactory = new NumberReadingFactory();
+            _dynamoTableQueryRunner = dynamoTableQueryRunner;
         }
         
         public Task<Reading<decimal>> GetReading(string stationId, DateTime dateFrom = default)
@@ -52,7 +51,7 @@ namespace HouseDashboardServer.Data
         {
             var reducedScanResult = await GetReducedScanResult(queryResult); 
 
-            return _numberReadingFactory.BuildReading(stationId, reducedScanResult);
+            return ReadingFactory.BuildReading(stationId, reducedScanResult);
         }
         
         private async Task<List<IMeasurement<decimal>>> GetReducedScanResult(Task<List<Document>> queryResult)

@@ -8,12 +8,12 @@ namespace tests.Data
 {
     public class NumberReadingFactoryTests
     {
-        private NumberReadingFactory systemUnderTest;
+        private ReadingFactory systemUnderTest;
 
         [SetUp]
         public void Setup()
         {
-            this.systemUnderTest = new NumberReadingFactory();
+            this.systemUnderTest = new ReadingFactory();
         }
 
         [Test]
@@ -27,13 +27,13 @@ namespace tests.Data
                     , 1234567
                     , 45);
             
-            var reducedScanResult = new List<Measurement<decimal>>()
+            var reducedScanResult = new List<IMeasurement<decimal>>()
             {
                 singleResult
             };
             
             var result 
-                = this.systemUnderTest.BuildReading(measurementName, reducedScanResult);
+                = ReadingFactory.BuildReading(measurementName, reducedScanResult);
         
             Assert.AreEqual(singleResult, result.Current);
             Assert.AreEqual(measurementName, result.Name);
@@ -57,14 +57,14 @@ namespace tests.Data
                     ,1577923200 
                     , 46);
             
-            var reducedScanResult = new List<Measurement<decimal>>()
+            var reducedScanResult = new List<IMeasurement<decimal>>()
             {
                 today,
                 yesterday
             };
             
             var result 
-                = this.systemUnderTest.BuildReading(measurementName, reducedScanResult);
+                = ReadingFactory.BuildReading(measurementName, reducedScanResult);
 
             var recentResult = result.Recent.First();
         

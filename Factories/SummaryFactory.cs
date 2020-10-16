@@ -13,17 +13,19 @@ namespace HouseDashboardServer.Factories
     {
         private readonly ILogger<SummaryFactory> _logger;
         private readonly IRainfallReadingsRepository _rainfallReadingsRepository;
-        private WeatherStationReadingRepository _weatherStationReadingsRepository;
+        private readonly IWeatherStationReadingRepository _weatherStationReadingRepository;
 
         private const string STATIONID = "wmr-89";
         private const string RAINFALLSTATIONID = "14881";
         private const string STATIONNAME = "WHITBURN";
 
-        public SummaryFactory(ILogger<SummaryFactory> logger, IRainfallReadingsRepository rainfallReadingsRepository)
+        public SummaryFactory(ILogger<SummaryFactory> logger
+            ,IRainfallReadingsRepository rainfallReadingsRepository
+            ,IWeatherStationReadingRepository weatherStationReadingRepository)
         {
             _logger = logger;
             _rainfallReadingsRepository = rainfallReadingsRepository;
-            _weatherStationReadingsRepository = new WeatherStationReadingRepository();
+            _weatherStationReadingRepository = weatherStationReadingRepository;
         }
 
         public Summary Build()
@@ -47,7 +49,7 @@ namespace HouseDashboardServer.Factories
         private async Task ApplyTemperatureSummaries(TemperatureSummary temperatureSummary)
         {
             var temperature 
-                = await _weatherStationReadingsRepository
+                = await _weatherStationReadingRepository
                     .GetTemperatureReading(STATIONID, TemperatureReadingType.OUTSIDE);
 
             var today = temperature
