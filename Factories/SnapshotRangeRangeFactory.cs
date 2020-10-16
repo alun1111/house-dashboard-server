@@ -10,16 +10,17 @@ namespace HouseDashboardServer.Factories
 {
     public class SnapshotRangeRangeFactory : ISnapshotRangeFactory
     {
+        private readonly IRainfallReadingsRepository _rainfallReadingsRepository;
+
         private readonly IFormatProvider _culture 
             = CultureInfo.CreateSpecificCulture("en-GB");
 
-        private readonly RainfallReadingsRepository _rainfallReadingsRepository;
         private readonly RiverLevelReadingsRepository _riverLevelsRepository;
 
-        public SnapshotRangeRangeFactory()
+        public SnapshotRangeRangeFactory(IRainfallReadingsRepository rainfallReadingsRepository)
         {
+            _rainfallReadingsRepository = rainfallReadingsRepository;
             _riverLevelsRepository = new RiverLevelReadingsRepository();
-            _rainfallReadingsRepository = new RainfallReadingsRepository();
         }
 
         public Dictionary<string, HashSet<SnapshotItem>> Build()

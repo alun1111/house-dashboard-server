@@ -12,18 +12,18 @@ namespace HouseDashboardServer.Factories
     public class SummaryFactory : ISummaryFactory<Summary>
     {
         private readonly ILogger<SummaryFactory> _logger;
-        private RainfallReadingsRepository _rainfallReadingsRepository;
+        private readonly IRainfallReadingsRepository _rainfallReadingsRepository;
         private WeatherStationReadingRepository _weatherStationReadingsRepository;
 
         private const string STATIONID = "wmr-89";
         private const string RAINFALLSTATIONID = "14881";
         private const string STATIONNAME = "WHITBURN";
 
-        public SummaryFactory(ILogger<SummaryFactory> logger)
+        public SummaryFactory(ILogger<SummaryFactory> logger, IRainfallReadingsRepository rainfallReadingsRepository)
         {
             _logger = logger;
+            _rainfallReadingsRepository = rainfallReadingsRepository;
             _weatherStationReadingsRepository = new WeatherStationReadingRepository();
-            _rainfallReadingsRepository = new RainfallReadingsRepository();
         }
 
         public Summary Build()

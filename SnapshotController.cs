@@ -14,9 +14,9 @@ namespace HouseDashboardServer
     {
         private readonly ISnapshotRangeFactory _snapshotRangeFactory;
 
-        public SnapshotController()
+        public SnapshotController(ISnapshotRangeFactory snapshotRangeFactory)
         {
-            _snapshotRangeFactory = new SnapshotRangeRangeFactory();
+            _snapshotRangeFactory = snapshotRangeFactory;
         }
         
         // GET

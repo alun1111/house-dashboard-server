@@ -7,19 +7,23 @@ using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
 using HouseDashboardServer.Models;
 using HouseDashboardServer.Utils;
+using Microsoft.Extensions.Logging;
 
 namespace HouseDashboardServer.Data
 {
-    public class RainfallReadingsRepository
+    public class RainfallReadingsRepository : IRainfallReadingsRepository
     {
+        private readonly ILogger<RainfallReadingsRepository> _logger;
+
         private readonly IFormatProvider _culture
             = CultureInfo.CreateSpecificCulture("en-GB");
 
         private readonly DynamoTableQueryRunner _dynamoTableQueryRunner;
         private readonly NumberReadingFactory _numberReadingFactory;
 
-        public RainfallReadingsRepository()
+        public RainfallReadingsRepository(ILogger<RainfallReadingsRepository> logger)
         {
+            _logger = logger;
             _dynamoTableQueryRunner = new DynamoTableQueryRunner();
             _numberReadingFactory = new NumberReadingFactory();
         }
@@ -27,7 +31,7 @@ namespace HouseDashboardServer.Data
         public Task<NumberReading<decimal>> GetReading(string stationId, DateTime dateFrom = default)
         {
             using var client = new AmazonDynamoDBClient(RegionEndpoint.EUWest1);
-
+            
             var queryResult =
                 _dynamoTableQueryRunner.QueryOnTimestampRange(client,
                     tableName: "rainfall-readings",
@@ -65,6 +69,8 @@ namespace HouseDashboardServer.Data
         {
             var reducedScanResult = new List<IDynamoDbItem<decimal>>();
             
+            _logger.Log(LogLevel.Debug, "Starting querying rainfall data");
+
             foreach (var d in await queryResult)
             {
                 var depth = decimal.Parse(d["amount"], _culture);
@@ -76,6 +82,8 @@ namespace HouseDashboardServer.Data
                     readingDate, unixDateTime, depth
                 ));
             }
+            
+            _logger.Log(LogLevel.Debug, "Finished querying rainfall data");
 
             return reducedScanResult;
         }

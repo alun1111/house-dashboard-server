@@ -11,18 +11,18 @@ namespace HouseDashboardServer
     [Route("[controller]")]
     public class RainfallController : ControllerBase
     {
-        private readonly RainfallReadingsRepository _rainfallRepository;
+        private readonly IRainfallReadingsRepository _rainfallReadingsRepository;
 
-        public RainfallController()
+        public RainfallController(IRainfallReadingsRepository rainfallReadingsRepository)
         {
-            _rainfallRepository = new RainfallReadingsRepository();
+            _rainfallReadingsRepository = rainfallReadingsRepository;
         }
 
         [EnableCors("default-policy")]
         [HttpGet("{id}")]
         public Task<NumberReading<decimal>> Get(string id, DateTime dateFrom)
         {
-           return _rainfallRepository.GetReading(id, dateFrom); 
+           return _rainfallReadingsRepository.GetReading(id, dateFrom); 
         }
     }
 }
