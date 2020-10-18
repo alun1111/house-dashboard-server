@@ -1,9 +1,10 @@
-using HouseDashboardServer.Data;
-using HouseDashboardServer.Factories;
-using HouseDashboardServer.Models;
+using house_dashboard_server.Data;
+using house_dashboard_server.Data.Interfaces;
+using house_dashboard_server.Factories;
+using house_dashboard_server.Models;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace HouseDashboardServer
+namespace house_dashboard_server
 {
     public static class Services
     {

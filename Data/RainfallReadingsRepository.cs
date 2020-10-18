@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DocumentModel;
-using HouseDashboardServer.Models;
-using HouseDashboardServer.Utils;
+using house_dashboard_server.Calculators;
+using house_dashboard_server.Data.Interfaces;
+using house_dashboard_server.Models;
 using Microsoft.Extensions.Logging;
 
-namespace HouseDashboardServer.Data
+namespace house_dashboard_server.Data
 {
     public class RainfallReadingsRepository : IRainfallReadingsRepository
     {

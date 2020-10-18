@@ -1,12 +1,11 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
-using HouseDashboardServer.Data;
-using HouseDashboardServer.Models;
+using house_dashboard_server.Data.Interfaces;
+using house_dashboard_server.Models;
 
-namespace HouseDashboardServer.Factories
+namespace house_dashboard_server.Factories
 {
     public class SnapshotRangeRangeFactory : ISnapshotRangeFactory
     {

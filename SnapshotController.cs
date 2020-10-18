@@ -1,12 +1,10 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using HouseDashboardServer.Factories;
-using HouseDashboardServer.Models;
+using house_dashboard_server.Factories;
+using house_dashboard_server.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HouseDashboardServer
+namespace house_dashboard_server
 {
     [ApiController]
     [Route("[controller]")]

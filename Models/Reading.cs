@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using HouseDashboardServer.Data;
+using house_dashboard_server.Data.Interfaces;
 
-namespace HouseDashboardServer.Models
+namespace house_dashboard_server.Models
 {
     /// <summary>
     /// A reading is a collection of measurements from a particular source (i.e. station)

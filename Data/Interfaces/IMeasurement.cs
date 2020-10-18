@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace HouseDashboardServer.Data
+namespace house_dashboard_server.Data.Interfaces
 {
     public interface IMeasurement<T>
     {

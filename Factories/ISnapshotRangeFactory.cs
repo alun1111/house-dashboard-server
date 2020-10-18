@@ -1,8 +1,7 @@
-using System;
 using System.Collections.Generic;
-using HouseDashboardServer.Models;
+using house_dashboard_server.Models;
 
-namespace HouseDashboardServer.Factories
+namespace house_dashboard_server.Factories
 {
     public interface ISnapshotRangeFactory
     {

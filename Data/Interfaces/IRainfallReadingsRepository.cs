@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using HouseDashboardServer.Models;
+using house_dashboard_server.Models;
 
-namespace HouseDashboardServer.Data
+namespace house_dashboard_server.Data.Interfaces
 {
     public interface IRainfallReadingsRepository
     {

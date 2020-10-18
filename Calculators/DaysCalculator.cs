@@ -1,6 +1,6 @@
 using System;
 
-namespace HouseDashboardServer.Utils
+namespace house_dashboard_server.Calculators
 {
     public class DaysCalculator
     {

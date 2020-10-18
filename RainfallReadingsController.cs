@@ -1,11 +1,11 @@
 using System;
 using System.Threading.Tasks;
-using HouseDashboardServer.Data;
-using HouseDashboardServer.Models;
+using house_dashboard_server.Data.Interfaces;
+using house_dashboard_server.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
-namespace HouseDashboardServer
+namespace house_dashboard_server
 {
     [ApiController]
     [Route("[controller]")]

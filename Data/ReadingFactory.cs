@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using HouseDashboardServer.Models;
+using house_dashboard_server.Data.Interfaces;
+using house_dashboard_server.Models;
 
-namespace HouseDashboardServer.Data
+namespace house_dashboard_server.Data
 {
     public class ReadingFactory
     {

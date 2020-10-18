@@ -1,6 +1,7 @@
 ﻿using System;
+using house_dashboard_server.Data.Interfaces;
 
-namespace HouseDashboardServer.Data
+namespace house_dashboard_server.Data
 {
     /// <summary>
     /// A measurement is a a value (T) at a point of time
