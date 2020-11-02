@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using house_dashboard_server.Data.Interfaces;
-using house_dashboard_server.Models;
+using house_dashboard_server.Data;
+using house_dashboard_server.Data.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 

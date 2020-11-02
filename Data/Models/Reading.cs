@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using house_dashboard_server.Data.Interfaces;
+using house_dashboard_server.Data.DynamoDB;
 
-namespace house_dashboard_server.Models
+namespace house_dashboard_server.Data.Models
 {
     /// <summary>
     /// A reading is a collection of measurements from a particular source (i.e. station)

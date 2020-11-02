@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using house_dashboard_server.Models;
+using house_dashboard_server.Data.DynamoDB;
+using house_dashboard_server.Data.Models;
 
-namespace house_dashboard_server.Data.Interfaces
+namespace house_dashboard_server.Data
 {
     public interface IRainfallReadingsRepository
     {

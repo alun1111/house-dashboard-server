@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
-using house_dashboard_server.Data.Interfaces;
-using house_dashboard_server.Models;
+using house_dashboard_server.Data.DynamoDB;
+using house_dashboard_server.Data.Models;
 
-namespace house_dashboard_server.Factories
+namespace house_dashboard_server.Data.Factories
 {
-    public class SnapshotRangeRangeFactory : ISnapshotRangeFactory
+    public class SnapshotRangeFactory : ISnapshotRangeFactory
     {
         private readonly IRainfallReadingsRepository _rainfallReadingsRepository;
         private readonly IRiverLevelReadingsRepository _riverLevelReadingsRepository;
@@ -15,7 +15,7 @@ namespace house_dashboard_server.Factories
         private readonly IFormatProvider _culture 
             = CultureInfo.CreateSpecificCulture("en-GB");
 
-        public SnapshotRangeRangeFactory(IRainfallReadingsRepository rainfallReadingsRepository
+        public SnapshotRangeFactory(IRainfallReadingsRepository rainfallReadingsRepository
             ,IRiverLevelReadingsRepository riverLevelReadingsRepository)
         {
             _rainfallReadingsRepository = rainfallReadingsRepository;

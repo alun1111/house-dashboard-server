@@ -2,11 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using house_dashboard_server.Data.Interfaces;
-using house_dashboard_server.Models;
+using house_dashboard_server.Data.Models;
 using Microsoft.Extensions.Logging;
 
-namespace house_dashboard_server.Factories
+namespace house_dashboard_server.Data.Factories
 {
     public class SummaryFactory : ISummaryFactory<Summary>
     {

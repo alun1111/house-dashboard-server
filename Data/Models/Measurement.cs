@@ -1,7 +1,7 @@
 ﻿using System;
-using house_dashboard_server.Data.Interfaces;
+using house_dashboard_server.Data.DynamoDB;
 
-namespace house_dashboard_server.Data
+namespace house_dashboard_server.Data.Models
 {
     /// <summary>
     /// A measurement is a a value (T) at a point of time

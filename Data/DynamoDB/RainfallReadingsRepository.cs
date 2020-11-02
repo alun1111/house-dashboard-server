@@ -4,11 +4,10 @@ using System.Globalization;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DocumentModel;
 using house_dashboard_server.Calculators;
-using house_dashboard_server.Data.Interfaces;
-using house_dashboard_server.Models;
+using house_dashboard_server.Data.Models;
 using Microsoft.Extensions.Logging;
 
-namespace house_dashboard_server.Data
+namespace house_dashboard_server.Data.DynamoDB
 {
     public class RainfallReadingsRepository : IRainfallReadingsRepository
     {

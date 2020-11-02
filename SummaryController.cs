@@ -1,5 +1,5 @@
-using house_dashboard_server.Factories;
-using house_dashboard_server.Models;
+using house_dashboard_server.Data.Factories;
+using house_dashboard_server.Data.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 

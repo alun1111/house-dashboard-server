@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace house_dashboard_server.Models
+namespace house_dashboard_server.Data.Models
 {
     public class Summary
     {

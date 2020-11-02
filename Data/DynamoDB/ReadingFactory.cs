@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using house_dashboard_server.Data.Interfaces;
-using house_dashboard_server.Models;
+using house_dashboard_server.Data.Models;
 
-namespace house_dashboard_server.Data
+namespace house_dashboard_server.Data.DynamoDB
 {
     public class ReadingFactory
     {
@@ -26,6 +25,7 @@ namespace house_dashboard_server.Data
                                     .ToList()
                                     );
         }
-
     }
+    
+    
 }

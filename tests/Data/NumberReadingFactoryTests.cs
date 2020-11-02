@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using house_dashboard_server.Data;
-using house_dashboard_server.Data.Interfaces;
+using house_dashboard_server.Data.DynamoDB;
+using house_dashboard_server.Data.Models;
 using NUnit.Framework;
 
 namespace tests.Data

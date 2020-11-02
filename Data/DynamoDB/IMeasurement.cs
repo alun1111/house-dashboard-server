@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace house_dashboard_server.Data.Interfaces
+namespace house_dashboard_server.Data.DynamoDB
 {
     public interface IMeasurement<T>
     {

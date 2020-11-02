@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DocumentModel;
-using house_dashboard_server.Data.Interfaces;
-using house_dashboard_server.Models;
+using house_dashboard_server.Data.Models;
 
-namespace house_dashboard_server.Data
+namespace house_dashboard_server.Data.DynamoDB
 {
     public class WeatherStationReadingRepository : IWeatherStationReadingRepository
     {

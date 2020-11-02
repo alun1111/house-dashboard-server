@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 using Amazon;
 using Amazon.DynamoDBv2;
 using Amazon.DynamoDBv2.DocumentModel;
-using house_dashboard_server.Data.Interfaces;
 
-namespace house_dashboard_server.Data
+namespace house_dashboard_server.Data.DynamoDB
 {
     public class DynamoTableQueryRunner : IDynamoTableQueryRunner
     {

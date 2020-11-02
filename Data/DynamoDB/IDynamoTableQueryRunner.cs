@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DocumentModel;
 
-namespace house_dashboard_server.Data.Interfaces
+namespace house_dashboard_server.Data.DynamoDB
 {
     public interface IDynamoTableQueryRunner
     {
