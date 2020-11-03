@@ -5,3 +5,5 @@ obj
 .idea
 
 *.blob
+/start-server-docker.sh
+/aws-logger-errors.txt
