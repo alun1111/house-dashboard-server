@@ -27,6 +27,23 @@ docker run --rm -d -p 5000:5000 \
 mcr.microsoft.com/dotnet/core/sdk:3.0 \
 dotnet run --urls http://0.0.0.0:5000
 ```
+## SEPA Station ID's
+
+### Rainfall stations
+
+| Station Name | Station Id |
+|--------------|------------|
+| Harperrig    | 15200      |
+| Whitburn     | 14881      |
+| Gogarbank    | 15196      |
+
+### River stations
+
+| Station Name | Id       |
+|--------------|----------|
+| Whitburn     | 14881 |
+| Almondell    | 14869 |
+| Cragiehall   | 14867 |
 
 ## Future
 
