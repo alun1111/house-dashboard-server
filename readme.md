@@ -27,6 +27,11 @@ docker run --rm -d -p 5000:5000 \
 mcr.microsoft.com/dotnet/core/sdk:3.0 \
 dotnet run --urls http://0.0.0.0:5000
 ```
+
+Docker build should work now, updated raspi to buster so using the following base image `mcr.microsoft.com/dotnet/sdk:5.0-buster-slim-arm32v7`:
+
+Should also run with the following
+
 ## SEPA Station ID's
 
 ### Rainfall stations
