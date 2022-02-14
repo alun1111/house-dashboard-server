@@ -16,21 +16,12 @@ GET /Temperature/{station-id}/outside
 
 Currently only hosted on a local raspi docker instance. Running with the following command as part of a manual deploy bash script.
 
-```bash
-docker run --rm -d -p 5000:5000 \
---name house-dashboard-server \
--v /path/to/house-dashboard-server:/app/ \
--v /path/to/house-dashboard-server-creds:/root/.aws/credentials:ro \
--w /app/ \
--e ASPNETCORE_URLS=http://+:5000 \
--e ASPNETCORE_ENVIRONMENT=Development \
-mcr.microsoft.com/dotnet/core/sdk:3.0 \
-dotnet run --urls http://0.0.0.0:5000
-```
-
 Docker build should work now, updated raspi to buster so using the following base image `mcr.microsoft.com/dotnet/sdk:5.0-buster-slim-arm32v7`:
 
-Should also run with the following
+```
+docker build . -t hds --network-host
+docker run --rm -it --network=host --name house-dashboard-server -v $local-credential-folder:/root/.aws/credentials:ro hds 
+```
 
 ## SEPA Station ID's
 
