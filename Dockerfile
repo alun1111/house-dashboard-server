@@ -18,7 +18,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0.14-buster-slim-arm32v7
 WORKDIR /app
 COPY --from=build /app/out .
 
-ENV ASPNETCORE_URLS=http://+:5000 
+ENV ASPNETCORE_URLS=http://0.0.0.0:5000 
 ENV ASPNETCORE_ENVIRONMENT=Development
 
 ENTRYPOINT ["dotnet", "house-dashboard-server.dll"]
