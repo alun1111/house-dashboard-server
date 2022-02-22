@@ -30,7 +30,7 @@ namespace house_dashboard_server.Data.Factories
                 = _rainfallReadingsRepository.GetMeasurements("14881");
             
             Task<List<IMeasurement<decimal>>> riverLevels 
-                = _riverLevelReadingsRepository.GetReadingItems("14881-SG");
+                = _riverLevelReadingsRepository.GetReadingItems("14881");
 
             Task.WaitAll(rainfallLevels, riverLevels);
 
