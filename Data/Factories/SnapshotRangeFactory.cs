@@ -22,9 +22,9 @@ namespace house_dashboard_server.Data.Factories
             _riverLevelReadingsRepository = riverLevelReadingsRepository;
         }
 
-        public Dictionary<string, HashSet<SnapshotItem>> Build()
+        public Dictionary<string, List<SnapshotItem>> Build()
         {
-            var output = new Dictionary<string, HashSet<SnapshotItem>>();
+            var output = new Dictionary<string, List<SnapshotItem>>();
             
             Task<List<IMeasurement<decimal>>> rainfallLevels 
                 = _rainfallReadingsRepository.GetMeasurements("14881");
@@ -41,7 +41,7 @@ namespace house_dashboard_server.Data.Factories
         }
 
         private void TryAddSnapshotItem(List<IMeasurement<decimal>> dynamoResult, 
-            Dictionary<string, HashSet<SnapshotItem>> output,
+            Dictionary<string, List<SnapshotItem>> output,
             string label)
         {
             foreach (var r in dynamoResult)
@@ -54,7 +54,10 @@ namespace house_dashboard_server.Data.Factories
                 }
                 else
                 {
-                    itemsOnDate = new HashSet<SnapshotItem> {new SnapshotItem {Description = label, Value = r.Value}};
+                    itemsOnDate = new List<SnapshotItem>
+                    {
+                        new() {Description = label, Value = r.Value}
+                    };
                     output.Add(roundedTime, itemsOnDate);
                 }
             }

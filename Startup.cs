@@ -1,3 +1,4 @@
+using house_dashboard_server.Formatters;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
@@ -27,7 +28,9 @@ namespace house_dashboard_server
             {
              c.SwaggerDoc("v1", new OpenApiInfo { Title = "My API", Version = "v1" });
             });
-
+            
+            services.AddMvc(options => options.OutputFormatters.Add(new CustomCsvFormatter()));
+            
             Services.ConfigureServices(services);
         }
 

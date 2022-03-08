@@ -16,11 +16,17 @@ namespace house_dashboard_server
         {
             _snapshotRangeFactory = snapshotRangeFactory;
         }
-        
-        // GET
+
         [EnableCors("default-policy")]
         [HttpGet]
-        public Dictionary<string, HashSet<SnapshotItem>> Get()
-            => _snapshotRangeFactory.Build();
+        public Dictionary<string, List<SnapshotItem>> Get()
+        {
+            // need to flatten out the snapshots and return just a list to work with
+            // text/csv
+           var snapshots =  _snapshotRangeFactory.Build();
+           
+           return snapshots;
+
+        }
     }
 }

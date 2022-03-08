@@ -5,6 +5,6 @@ namespace house_dashboard_server.Data.Factories
 {
     public interface ISnapshotRangeFactory
     {
-        public Dictionary<string, HashSet<SnapshotItem>> Build();
+        public Dictionary<string, List<SnapshotItem>> Build();
     }
 }
