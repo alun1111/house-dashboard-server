@@ -9,3 +9,5 @@ obj
 /start-server-docker.sh
 /aws-logger-errors.txt
 core
+
+house-dashboard-server.sln.DotSettings.user
