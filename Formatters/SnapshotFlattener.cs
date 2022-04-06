@@ -9,18 +9,33 @@ namespace house_dashboard_server.Formatters
     {
         public List<object[]> Flatten(Dictionary<string, List<SnapshotItem>> input)
         {
-            var snapshot = input.First();
             var output = new List<object[]>();
-            var row = new object[snapshot.Value.Count];
+            var outputWithHeader = new List<object[]>();
+            var header = new HashSet<string>() { "DateTime" };
             
-            for(var x =0; x < snapshot.Value.Count; x++)
+            foreach (var snapshot in input)
             {
-                row[x] = snapshot.Value[x];
+                var numSnapshotValues = snapshot.Value.Count;
+                 
+                // row array +1 as must include snapshot key (DateTime)
+                var row = new object[numSnapshotValues + 1];
+                
+                // first column always datetime
+                row[0] = snapshot.Key;
+                
+                for(var x = 0; x < numSnapshotValues; x++)
+                {
+                    header.Add(snapshot.Value[x].Description);
+                    row[x+1] = snapshot.Value[x].Value;
+                }
+
+                output.Add(row);
             }
-
-            output.Add(row);
-
-            return output;
+            
+            outputWithHeader.Add(header.ToArray());
+            outputWithHeader.AddRange(output);
+            
+            return outputWithHeader;
         }
     }
 }
