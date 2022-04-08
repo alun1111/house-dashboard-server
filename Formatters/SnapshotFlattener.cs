@@ -11,20 +11,36 @@ namespace house_dashboard_server.Formatters
         {
             var output = new List<object[]>();
             var outputWithHeader = new List<object[]>();
-            var header = new HashSet<string>() { "DateTime" };
+            var header = new List<string>() { "DateTime" };
+            var maxColumns = 0;
             
             foreach (var snapshot in input)
             {
+                object[] row;
+                
                 var numSnapshotValues = snapshot.Value.Count;
+                if (numSnapshotValues > maxColumns)
+                {
+                    maxColumns = numSnapshotValues;
+                }
                  
-                // row array +1 as must include snapshot key (DateTime)
-                var row = new object[numSnapshotValues + 1];
+                // max columns as each datetime key may have moer or less values (header columns) but we
+                // want nulls in the missing ones
+                // also - row array +1 as must include snapshot key (DateTime)
+                row = new object[maxColumns + 1];
                 
                 // first column always datetime
                 row[0] = snapshot.Key;
                 
                 for(var x = 0; x < numSnapshotValues; x++)
                 {
+                    if (header.Contains(snapshot.Value[x].Description))
+                    {
+                        var i = header.IndexOf(snapshot.Value[x].Description);
+                        row[i] = snapshot.Value[x].Value;
+                        continue;
+                    }
+                    
                     header.Add(snapshot.Value[x].Description);
                     row[x+1] = snapshot.Value[x].Value;
                 }

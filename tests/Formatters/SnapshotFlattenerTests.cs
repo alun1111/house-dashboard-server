@@ -17,6 +17,9 @@ namespace tests.Formatters
             this.systemUnderTest = new SnapshotFlattener();
         }
 
+        /// <summary>
+        /// Header should contain datetime, <col1>, <col2>
+        /// </summary>
         [Test]
         public void ReturnsHeader()
         {
@@ -31,6 +34,9 @@ namespace tests.Formatters
             Assert.AreEqual(expected, header);
         }
 
+        /// <summary>
+        /// For one snapshot, should just have header and row with correct columns
+        /// </summary>
         [Test]
         public void ReturnsFlatListFromSingleKey()
         {
@@ -48,6 +54,9 @@ namespace tests.Formatters
             Assert.AreEqual(expected, result);
         }
 
+        /// <summary>
+        /// For two snapshots, header and two rows with correct columns
+        /// </summary>
         [Test]
         public void ReturnsFlatListFromMultiKey()
         {
@@ -69,6 +78,36 @@ namespace tests.Formatters
             Assert.AreEqual(expected, result);
         }
         
+        /// <summary>
+        /// When the second snapshot has different columns, it should put a blank field in the missing column
+        /// </summary>
+        [Test]
+        public void ReturnsFlatListFromMultiKeyMissingColumns()
+        {
+            var input = new Dictionary<string, List<SnapshotItem>>()
+            {
+                SingleKey("16/03/2022 10:00:00", new List<(string, decimal)>()
+                {
+                    ("Test1", 10M),
+                    ("Test2", 20M),
+                }),
+                SingleKey("17/03/2022 10:00:00", new List<(string, decimal)>()
+                {
+                    ("Test2", 10M),
+                }),
+            };
+
+            var expected = new List<object[]>()
+            {
+                { new object[] { "DateTime", "Test1", "Test2" } },
+                { new object[] { "16/03/2022 10:00:00", 10M, 20M } },
+                { new object[] { "17/03/2022 10:00:00", null, 10M } }
+            };
+
+            var result = systemUnderTest.Flatten(input);
+
+            Assert.AreEqual(expected, result);
+        }
         // Next tests: handle snapshots with different columns (i.e. ordering of values under columns)
         
         private static KeyValuePair<string, List<SnapshotItem>> SingleKey(string dateTime)
@@ -88,6 +127,21 @@ namespace tests.Formatters
                         Value = 0.4M
                     }
                 });
+        }
+        
+        private static KeyValuePair<string, List<SnapshotItem>> SingleKey(string dateTime, List<(string, decimal)> values)
+        {
+            var snapshotValues = new List<SnapshotItem>();
+            
+            foreach (var item in values)
+            {
+                snapshotValues.Add(new SnapshotItem()
+                {
+                    Description = item.Item1, Value = item.Item2
+                });
+            }
+
+            return new KeyValuePair<string, List<SnapshotItem>>( dateTime, snapshotValues);
         }
     }
 }
