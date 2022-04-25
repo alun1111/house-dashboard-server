@@ -108,8 +108,43 @@ namespace tests.Formatters
 
             Assert.AreEqual(expected, result);
         }
-        // Next tests: handle snapshots with different columns (i.e. ordering of values under columns)
         
+        /// <summary>
+        /// When the third snapshot has a new column, it should put a blank field in the missing columns for previous
+        /// </summary>
+        [Test]
+        public void ReturnsFlatListFromMultiKeyMissingColumnsExpertMode()
+        {
+            var input = new Dictionary<string, List<SnapshotItem>>()
+            {
+                SingleKey("16/03/2022 10:00:00", new List<(string, decimal)>()
+                {
+                    ("Test1", 10M),
+                    ("Test2", 20M),
+                }),
+                SingleKey("17/03/2022 10:00:00", new List<(string, decimal)>()
+                {
+                    ("Test2", 10M),
+                }),
+                SingleKey("18/03/2022 10:00:00", new List<(string, decimal)>()
+                {
+                    ("Test2", 5M),
+                    ("Test3", 22M),
+                }),
+            };
+
+            var expected = new List<object[]>()
+            {
+                { new object[] { "DateTime", "Test1", "Test2", "Test3" } },
+                { new object[] { "16/03/2022 10:00:00", 10M, 20M, null } },
+                { new object[] { "17/03/2022 10:00:00", null, 10M, null } },
+                { new object[] { "18/03/2022 10:00:00", null, 5M, 22M } }
+            };
+
+            var result = systemUnderTest.Flatten(input);
+
+            Assert.AreEqual(expected, result);
+        }
         private static KeyValuePair<string, List<SnapshotItem>> SingleKey(string dateTime)
         {
             return new KeyValuePair<string, List<SnapshotItem>>(

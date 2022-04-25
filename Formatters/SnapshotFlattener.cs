@@ -11,44 +11,41 @@ namespace house_dashboard_server.Formatters
         {
             var output = new List<object[]>();
             var outputWithHeader = new List<object[]>();
-            var header = new List<string>() { "DateTime" };
-            var maxColumns = 0;
+            var headerRow = new List<string>() { "DateTime" };
+            
+            // Shirley more performant way than this... refactor
+            foreach (var s in input)
+            {
+                foreach (var h in s.Value)
+                {
+                    if (!headerRow.Contains(h.Description))
+                    {
+                        headerRow.Add(h.Description);
+                    }
+                }
+            }
+            
+            var headerColumns = headerRow.Count;
             
             foreach (var snapshot in input)
             {
-                object[] row;
-                
-                var numSnapshotValues = snapshot.Value.Count;
-                if (numSnapshotValues > maxColumns)
-                {
-                    maxColumns = numSnapshotValues;
-                }
-                 
-                // max columns as each datetime key may have moer or less values (header columns) but we
-                // want nulls in the missing ones
-                // also - row array +1 as must include snapshot key (DateTime)
-                row = new object[maxColumns + 1];
+                var row = new object[headerColumns];
                 
                 // first column always datetime
                 row[0] = snapshot.Key;
                 
-                for(var x = 0; x < numSnapshotValues; x++)
+                for(var x = 0; x < snapshot.Value.Count; x++)
                 {
-                    if (header.Contains(snapshot.Value[x].Description))
-                    {
-                        var i = header.IndexOf(snapshot.Value[x].Description);
-                        row[i] = snapshot.Value[x].Value;
-                        continue;
-                    }
+                    var columnName = snapshot.Value[x].Description;
                     
-                    header.Add(snapshot.Value[x].Description);
-                    row[x+1] = snapshot.Value[x].Value;
+                    var columnIndex = headerRow.IndexOf(columnName);
+                    row[columnIndex] = snapshot.Value[x].Value;
                 }
 
                 output.Add(row);
             }
             
-            outputWithHeader.Add(header.ToArray());
+            outputWithHeader.Add(headerRow.ToArray());
             outputWithHeader.AddRange(output);
             
             return outputWithHeader;
