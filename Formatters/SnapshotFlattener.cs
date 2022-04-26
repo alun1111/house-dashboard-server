@@ -1,16 +1,17 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using house_dashboard_server.Data.Models;
 
 namespace house_dashboard_server.Formatters
 {
-    public class SnapshotFlattener
+    public class SnapshotFlattener : ISnapshotFlattener
     {
-        public List<object[]> Flatten(Dictionary<string, List<SnapshotItem>> input)
+        public List<string[]> Flatten(Dictionary<string, List<SnapshotItem>> input)
         {
-            var output = new List<object[]>();
-            var outputWithHeader = new List<object[]>();
+            var output = new List<string[]>();
+            var outputWithHeader = new List<string[]>();
             var headerRow = new List<string>() { "DateTime" };
             
             // Shirley more performant way than this... refactor
@@ -29,7 +30,7 @@ namespace house_dashboard_server.Formatters
             
             foreach (var snapshot in input)
             {
-                var row = new object[headerColumns];
+                var row = new string[headerColumns];
                 
                 // first column always datetime
                 row[0] = snapshot.Key;
@@ -39,7 +40,7 @@ namespace house_dashboard_server.Formatters
                     var columnName = snapshot.Value[x].Description;
                     
                     var columnIndex = headerRow.IndexOf(columnName);
-                    row[columnIndex] = snapshot.Value[x].Value;
+                    row[columnIndex] = snapshot.Value[x].Value.ToString(CultureInfo.InvariantCulture);
                 }
 
                 output.Add(row);

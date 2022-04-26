@@ -26,7 +26,7 @@ namespace tests.Formatters
             var input = new Dictionary<string, List<SnapshotItem>>();
             input.Add(SingleKey("16/03/2022 10:00:00"));
 
-            var expected = new object[] { "DateTime", "Whitburn - Rainfall", "Whitburn - River Level" };
+            var expected = new string[] { "DateTime", "Whitburn - Rainfall", "Whitburn - River Level" };
 
             var result = systemUnderTest.Flatten(input);
             var header = result.First();
@@ -43,10 +43,10 @@ namespace tests.Formatters
             var input = new Dictionary<string, List<SnapshotItem>>();
             input.Add(SingleKey("16/03/2022 10:00:00"));
 
-            var expected = new List<object[]>()
+            var expected = new List<string[]>()
             {
-                { new object[] { "DateTime", "Whitburn - Rainfall", "Whitburn - River Level" } },
-                { new object[] { "16/03/2022 10:00:00", 1.2M, 0.4M } }
+                { new string[] { "DateTime", "Whitburn - Rainfall", "Whitburn - River Level" } },
+                { new string[] { "16/03/2022 10:00:00", "1.2", "0.4" } }
             };
 
             var result = systemUnderTest.Flatten(input);
@@ -66,11 +66,11 @@ namespace tests.Formatters
                 SingleKey("17/03/2022 10:00:00")
             };
 
-            var expected = new List<object[]>()
+            var expected = new List<string[]>()
             {
-                { new object[] { "DateTime", "Whitburn - Rainfall", "Whitburn - River Level" } },
-                { new object[] { "16/03/2022 10:00:00", 1.2M, 0.4M } },
-                { new object[] { "17/03/2022 10:00:00", 1.2M, 0.4M } }
+                { new string[] { "DateTime", "Whitburn - Rainfall", "Whitburn - River Level" } },
+                { new string[] { "16/03/2022 10:00:00", "1.2", "0.4" } },
+                { new string[] { "17/03/2022 10:00:00", "1.2", "0.4" } }
             };
 
             var result = systemUnderTest.Flatten(input);
@@ -97,11 +97,11 @@ namespace tests.Formatters
                 }),
             };
 
-            var expected = new List<object[]>()
+            var expected = new List<string[]>()
             {
-                { new object[] { "DateTime", "Test1", "Test2" } },
-                { new object[] { "16/03/2022 10:00:00", 10M, 20M } },
-                { new object[] { "17/03/2022 10:00:00", null, 10M } }
+                { new string[] { "DateTime", "Test1", "Test2" } },
+                { new string[] { "16/03/2022 10:00:00", "10", "20" } },
+                { new string[] { "17/03/2022 10:00:00", null, "10" } }
             };
 
             var result = systemUnderTest.Flatten(input);
@@ -133,12 +133,12 @@ namespace tests.Formatters
                 }),
             };
 
-            var expected = new List<object[]>()
+            var expected = new List<string[]>()
             {
-                { new object[] { "DateTime", "Test1", "Test2", "Test3" } },
-                { new object[] { "16/03/2022 10:00:00", 10M, 20M, null } },
-                { new object[] { "17/03/2022 10:00:00", null, 10M, null } },
-                { new object[] { "18/03/2022 10:00:00", null, 5M, 22M } }
+                { new string[] { "DateTime", "Test1", "Test2", "Test3" } },
+                { new string[] { "16/03/2022 10:00:00", "10", "20", null } },
+                { new string[] { "17/03/2022 10:00:00", null, "10", null } },
+                { new string[] { "18/03/2022 10:00:00", null, "5", "22" } }
             };
 
             var result = systemUnderTest.Flatten(input);

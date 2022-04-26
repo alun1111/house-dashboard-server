@@ -21,30 +21,19 @@ namespace house_dashboard_server.Formatters
         {
             var csv = new StringBuilder();
             // Context is the outbound model
-            var contextType = context.Object?.GetType();
+            var contextObject = context.Object as IEnumerable<string[]>;
 
-            if (contextType == null)
+            if (contextObject == null)
                 return null;
             
-            // Write first line of csv as headers by getting the properties of the context
-            csv.Append(string.Join("," , contextType.GetProperties().Select(p=>p.Name)));
-            
-            // loop through context object after
-            foreach (var obj in (IEnumerable<object>)context.Object) {
-                var vals = obj.GetType().GetProperties().Select(
-                    pi => new
-                    {
-                        Value = pi.GetValue(obj, null)
-                    }
-                );
-
+            // loop through context object after (only strings)
+            foreach (string[] str in contextObject) {
                 List<string> values = new List<string>();
-                foreach (var val in vals)
+                foreach(var s in str)
                 {
-                    if (val.Value != null)
-                    {
-                        var tmpval = val.Value.ToString();
+                    var tmpval = s;
 
+                    if (tmpval != null){
                         //Check if the value contains a comma and place it in quotes if so
                         if (tmpval.Contains(","))
                             tmpval = string.Concat("\"", tmpval, "\"");

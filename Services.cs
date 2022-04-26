@@ -2,6 +2,7 @@ using house_dashboard_server.Data;
 using house_dashboard_server.Data.DynamoDB;
 using house_dashboard_server.Data.Factories;
 using house_dashboard_server.Data.Models;
+using house_dashboard_server.Formatters;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace house_dashboard_server
@@ -12,6 +13,7 @@ namespace house_dashboard_server
         {
             services.AddScoped<ISummaryFactory<Summary>, SummaryFactory>();
             services.AddScoped<ISnapshotRangeFactory, SnapshotRangeFactory>();
+            services.AddScoped<ISnapshotFlattener, SnapshotFlattener>();
             services.AddScoped<IDynamoTableQueryRunner, DynamoTableQueryRunner>();
             
             services.AddScoped<IRainfallReadingsRepository, RainfallReadingsRepository>();

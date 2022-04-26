@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Linq;
 using house_dashboard_server.Data.Factories;
 using house_dashboard_server.Data.Models;
+using house_dashboard_server.Formatters;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,22 +13,21 @@ namespace house_dashboard_server
     public class SnapshotController : Controller
     {
         private readonly ISnapshotRangeFactory _snapshotRangeFactory;
+        private readonly ISnapshotFlattener _snapshotFlattener;
 
-        public SnapshotController(ISnapshotRangeFactory snapshotRangeFactory)
+        public SnapshotController(ISnapshotRangeFactory snapshotRangeFactory, 
+            ISnapshotFlattener snapshotFlattener)
         {
             _snapshotRangeFactory = snapshotRangeFactory;
+            _snapshotFlattener = snapshotFlattener;
         }
-
+        
         [EnableCors("default-policy")]
         [HttpGet]
-        public Dictionary<string, List<SnapshotItem>> Get()
+        public List<string[]> Get()
         {
-            // need to flatten out the snapshots and return just a list to work with
-            // text/csv
            var snapshots =  _snapshotRangeFactory.Build();
-           
-           return snapshots;
-
+           return _snapshotFlattener.Flatten(snapshots);
         }
     }
 }
