@@ -1,7 +1,5 @@
 using System.Collections.Generic;
-using System.Linq;
 using house_dashboard_server.Data.Factories;
-using house_dashboard_server.Data.Models;
 using house_dashboard_server.Formatters;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
@@ -26,7 +24,7 @@ namespace house_dashboard_server
         [HttpGet]
         public List<string[]> Get()
         {
-           var snapshots =  _snapshotRangeFactory.Build();
+           var snapshots = _snapshotRangeFactory.Build();
            return _snapshotFlattener.Flatten(snapshots);
         }
     }
