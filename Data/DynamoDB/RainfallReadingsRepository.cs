@@ -36,8 +36,13 @@ namespace house_dashboard_server.Data.DynamoDB
             return PrepareRainfallReading(queryResult, stationId);
         }
         
-        public Task<List<IMeasurement<decimal>>> GetMeasurements(string stationId, DateTime dateFrom = default)
+        public Task<List<IMeasurement<decimal>>> GetMeasurements(string stationId, 
+            DateTime dateFrom = default)
         {
+            
+            _logger.Log(LogLevel.Debug, "Start: " + ExactTimeToString()
+                                                  + ", Rainfall GetMeasurements for: " + stationId);
+
             var queryResult =
                 _dynamoTableQueryRunner.QueryOnTimestampRange(
                     tableName: "rainfall-readings",
@@ -45,9 +50,16 @@ namespace house_dashboard_server.Data.DynamoDB
                     partitionValue: stationId,
                     days: DaysCalculator.DaysSinceDateFrom(dateFrom));
 
+            _logger.Log(LogLevel.Debug, "End: " + ExactTimeToString()
+                                                + ", Rainfall GetMeasurements for: " + stationId);
+            
             return GetReducedScanResult(queryResult); 
         }
 
+        private string ExactTimeToString()
+        {
+            return DateTime.Now.ToString("hh:mm:ss.fff", _culture);
+        }
 
         private async Task<Reading<decimal>> PrepareRainfallReading(Task<List<Document>> queryResult,
             string stationId)
@@ -61,8 +73,6 @@ namespace house_dashboard_server.Data.DynamoDB
         {
             var reducedScanResult = new List<IMeasurement<decimal>>();
             
-            _logger.Log(LogLevel.Debug, "Starting querying rainfall data");
-
             foreach (var d in await queryResult)
             {
                 var depth = decimal.Parse(d["amount"], _culture);

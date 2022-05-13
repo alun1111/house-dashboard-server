@@ -13,6 +13,8 @@ namespace house_dashboard_server.Data.DynamoDB
 
         private readonly IFormatProvider _culture 
             = CultureInfo.CreateSpecificCulture("en-GB");
+        
+        private readonly Random _random = new Random();
 
         public Task<List<Document>> QueryOnTimestampRange(string tableName,
                                                              string partionKey,

@@ -1,9 +1,11 @@
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using house_dashboard_server.Data.DynamoDB;
 using house_dashboard_server.Data.Models;
+using Microsoft.Extensions.Logging;
 
 namespace house_dashboard_server.Data.Factories
 {
@@ -11,12 +13,17 @@ namespace house_dashboard_server.Data.Factories
     {
         private readonly IRainfallReadingsRepository _rainfallReadingsRepository;
         private readonly IRiverLevelReadingsRepository _riverLevelReadingsRepository;
-
+        private readonly ILogger<SnapshotRangeFactory> _logger;
+        private readonly IFormatProvider _culture 
+            = CultureInfo.CreateSpecificCulture("en-GB");
+        
         public SnapshotRangeFactory(IRainfallReadingsRepository rainfallReadingsRepository
-            ,IRiverLevelReadingsRepository riverLevelReadingsRepository)
+            , IRiverLevelReadingsRepository riverLevelReadingsRepository
+            , ILogger<SnapshotRangeFactory> logger)
         {
             _rainfallReadingsRepository = rainfallReadingsRepository;
             _riverLevelReadingsRepository = riverLevelReadingsRepository;
+            _logger = logger;
         }
 
         /// <summary>
@@ -32,6 +39,8 @@ namespace house_dashboard_server.Data.Factories
             try
             {
                 // Wait for all the tasks to finish.
+                _logger.Log(LogLevel.Debug, "Starting WaitAll: " 
+                                            + DateTime.Now.ToString("hh:mm:ss.fff", _culture));
                 Task.WaitAll(readings.Select(t=>t.Value).ToArray());
             }
             catch (AggregateException e)
@@ -43,6 +52,9 @@ namespace house_dashboard_server.Data.Factories
             {
                 if (value is Task<List<IMeasurement<decimal>>> val)
                 {
+                    
+                    _logger.Log(LogLevel.Debug, "Getting Result: " 
+                                            + DateTime.Now.ToString("hh:mm:ss.fff", _culture));
                     TryAddSnapshotItem(val.Result, output, key);
                 }
             }

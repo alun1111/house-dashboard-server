@@ -41,9 +41,3 @@ docker run --rm -it --network=host --name house-dashboard-server -v $local-crede
 | Almondell    | 14869 |
 | Cragiehall   | 14867 |
 
-## Future
-
-- Deploy to AWS, need to add some authentication and "prodify" a little before this.
-- Add some optimisation (caching) around DynamoDB calls.
-- Add more data sources (one I plan to do is whats-my-next-bin-collection).
-

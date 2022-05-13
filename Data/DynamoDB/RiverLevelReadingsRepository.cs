@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DocumentModel;
 using house_dashboard_server.Calculators;
 using house_dashboard_server.Data.Models;
+using Microsoft.Extensions.Logging;
 
 namespace house_dashboard_server.Data.DynamoDB
 {
@@ -15,9 +16,13 @@ namespace house_dashboard_server.Data.DynamoDB
         private readonly IFormatProvider _culture 
             = CultureInfo.CreateSpecificCulture("en-GB");
 
+        private readonly ILogger<RiverLevelReadingsRepository> _logger;
 
-        public RiverLevelReadingsRepository(IDynamoTableQueryRunner dynamoTableQueryRunner)
+
+        public RiverLevelReadingsRepository(IDynamoTableQueryRunner dynamoTableQueryRunner
+            , ILogger<RiverLevelReadingsRepository> logger)
         {
+            _logger = logger;
             _dynamoTableQueryRunner = dynamoTableQueryRunner;
         }
         
@@ -35,6 +40,8 @@ namespace house_dashboard_server.Data.DynamoDB
 
         public Task<List<IMeasurement<decimal>>> GetReadingItems(string stationId, DateTime dateFrom = default)
         {
+            _logger.Log(LogLevel.Debug, "Start: " + ExactTimeToString() + ", RiverLevels GetReading for: " + stationId);
+            
             var queryResult =
                 _dynamoTableQueryRunner.QueryOnTimestampRange(
                     tableName: "river-level-readings",
@@ -42,9 +49,16 @@ namespace house_dashboard_server.Data.DynamoDB
                     partitionValue: stationId,
                     days: DaysCalculator.DaysSinceDateFrom(dateFrom));
 
+            _logger.Log(LogLevel.Debug, "End: " + ExactTimeToString() + ", RiverLevels GetReading for: " + stationId);
+            
             return GetReducedScanResult(queryResult); 
         }
-        
+
+        private string ExactTimeToString()
+        {
+            return DateTime.Now.ToString("hh:mm:ss.fff", _culture);
+        }
+
         private async Task<Reading<decimal>> PrepareRiverLevelReading(Task<List<Document>> queryResult, string stationId)
         {
             var reducedScanResult = await GetReducedScanResult(queryResult); 
