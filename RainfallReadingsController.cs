@@ -4,6 +4,7 @@ using house_dashboard_server.Data;
 using house_dashboard_server.Data.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace house_dashboard_server
 {
@@ -11,18 +12,27 @@ namespace house_dashboard_server
     [Route("[controller]")]
     public class RainfallController : ControllerBase
     {
+        private readonly IConfiguration _configuration;
         private readonly IRainfallReadingsRepository _rainfallReadingsRepository;
+        private readonly string _apiKey;
 
-        public RainfallController(IRainfallReadingsRepository rainfallReadingsRepository)
+        public RainfallController(IConfiguration configuration
+            ,IRainfallReadingsRepository rainfallReadingsRepository)
         {
+            _configuration = configuration;
+            _apiKey = configuration["ApiKey"];
             _rainfallReadingsRepository = rainfallReadingsRepository;
         }
 
         [EnableCors("default-policy")]
         [HttpGet("{id}")]
-        public Task<Reading<decimal>> Get(string id, DateTime dateFrom)
+        public async Task<IActionResult> Get([FromHeader]string authorisation
+            ,string id, DateTime dateFrom)
         {
-           return _rainfallReadingsRepository.GetReading(id, dateFrom); 
+            if (authorisation != _apiKey)
+                return Unauthorized();
+            
+            return Ok(await _rainfallReadingsRepository.GetReading(id, dateFrom)); 
         }
     }
 }
