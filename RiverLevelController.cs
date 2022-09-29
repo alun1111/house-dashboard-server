@@ -24,8 +24,12 @@ namespace house_dashboard_server
 
         [EnableCors("default-policy")]
         [HttpGet("{id}")]
-        public async Task<IActionResult> Get(string id, DateTime dateFrom)
+        public async Task<IActionResult> Get([FromHeader]string authorisation, 
+            string id, DateTime dateFrom)
         {
+            if (authorisation != _apiKey)
+                return Unauthorized();
+            
             return Ok(await _riverLevelReadingsRepository.GetReading(id, dateFrom));
         }
     }
