@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>house_dashboard_server</RootNamespace>
+    <UserSecretsId>9a1065b5-1c70-4eab-bf02-da01e56177be</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
