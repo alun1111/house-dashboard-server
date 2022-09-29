@@ -4,6 +4,7 @@ using house_dashboard_server.Data;
 using house_dashboard_server.Data.Models;
 using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
 namespace house_dashboard_server
 {
@@ -12,15 +13,20 @@ namespace house_dashboard_server
     public class RiverLevelController : ControllerBase
     {
         private readonly IRiverLevelReadingsRepository _riverLevelReadingsRepository;
+        private readonly string _apiKey;
 
-        public RiverLevelController(IRiverLevelReadingsRepository riverLevelReadingsRepository)
+        public RiverLevelController(IConfiguration configuration,
+            IRiverLevelReadingsRepository riverLevelReadingsRepository)
         {
+            _apiKey = configuration["ApiKey"];
             _riverLevelReadingsRepository = riverLevelReadingsRepository;
         }
 
         [EnableCors("default-policy")]
         [HttpGet("{id}")]
-        public Task<Reading<decimal>> Get(string id, DateTime dateFrom) 
-            => _riverLevelReadingsRepository.GetReading(id, dateFrom);
+        public async Task<IActionResult> Get(string id, DateTime dateFrom)
+        {
+            return Ok(await _riverLevelReadingsRepository.GetReading(id, dateFrom));
+        }
     }
 }

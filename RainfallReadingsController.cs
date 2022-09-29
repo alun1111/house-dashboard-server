@@ -12,14 +12,12 @@ namespace house_dashboard_server
     [Route("[controller]")]
     public class RainfallController : ControllerBase
     {
-        private readonly IConfiguration _configuration;
         private readonly IRainfallReadingsRepository _rainfallReadingsRepository;
         private readonly string _apiKey;
 
         public RainfallController(IConfiguration configuration
             ,IRainfallReadingsRepository rainfallReadingsRepository)
         {
-            _configuration = configuration;
             _apiKey = configuration["ApiKey"];
             _rainfallReadingsRepository = rainfallReadingsRepository;
         }
