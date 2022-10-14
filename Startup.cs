@@ -18,7 +18,7 @@ namespace house_dashboard_server
                 options.AddPolicy("default-policy",
                 builder =>
                 {
-                    builder.AllowAnyOrigin(); // NAUGHTY
+                    builder.AllowAnyHeader().AllowAnyOrigin(); // NAUGHTY
                 });
             });
             services.AddControllers();

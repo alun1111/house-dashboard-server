@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using house_dashboard_server.Data;
 using house_dashboard_server.Data.Models;
 using Microsoft.AspNetCore.Cors;
@@ -23,24 +24,26 @@ namespace house_dashboard_server
 
         [EnableCors("default-policy")]
         [HttpGet("{id}/inside")]
-        public async Task<IActionResult> GetInside([FromHeader]string authorisation, string id)
+        public async Task<IActionResult> GetInside([FromHeader]string authorisation
+            ,string id, DateTime dateFrom)
         {
             if (authorisation != _apiKey)
                 return Unauthorized();
             
             return Ok(await _weatherStationReadingRepository.GetTemperatureReading(id
-                , TemperatureReadingType.INSIDE));
+                , TemperatureReadingType.INSIDE, dateFrom));
         }
 
         [EnableCors("default-policy")]
         [HttpGet("{id}/outside")]
-        public async Task<IActionResult> GetOutside([FromHeader]string authorisation, string id)
+        public async Task<IActionResult> GetOutside([FromHeader]string authorisation
+            ,string id, DateTime dateFrom)
         {
             if (authorisation != _apiKey)
                 return Unauthorized();
             
             return Ok(await _weatherStationReadingRepository.GetTemperatureReading(id
-                , TemperatureReadingType.OUTSIDE));
+                , TemperatureReadingType.OUTSIDE, dateFrom));
         }
     }
 }

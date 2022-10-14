@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Threading.Tasks;
 using Amazon.DynamoDBv2.DocumentModel;
+using house_dashboard_server.Calculators;
 using house_dashboard_server.Data.Models;
 
 namespace house_dashboard_server.Data.DynamoDB
@@ -19,7 +20,8 @@ namespace house_dashboard_server.Data.DynamoDB
             _dynamoTableQueryRunner = dynamoTableQueryRunner;
         }
 
-        public Task<Reading<decimal>> GetTemperatureReading(string stationId, TemperatureReadingType type)
+        public Task<Reading<decimal>> GetTemperatureReading(string stationId, TemperatureReadingType type,
+            DateTime dateFrom = default)
         {
             
             var queryResult = 
@@ -27,7 +29,7 @@ namespace house_dashboard_server.Data.DynamoDB
                     tableName: "weather-station-readings",
                     partionKey: "station-id",
                     partitionValue: stationId,
-                    days: 1);
+                    days: DaysCalculator.DaysSinceDateFrom(dateFrom));
 
             switch (type)
             {

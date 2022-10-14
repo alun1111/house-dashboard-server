@@ -14,12 +14,17 @@ GET /Temperature/{station-id}/outside
 
 ## Deployment
 
-Currently only hosted on a local raspi docker instance. Running with the following command as part of a manual deploy bash script.
+Currently only hosted on a local raspi docker instance. Running with the following command as part of a manual deploy
+bash script.
 
-Docker build should work now, updated raspi to buster so using the following base image `mcr.microsoft.com/dotnet/sdk:5.0-buster-slim-arm32v7`:
+Docker build should work now, updated raspi to buster so using the following base
+image `mcr.microsoft.com/dotnet/sdk:5.0-buster-slim-arm32v7`:
 
 ```
 docker build . -t hds --network=host
+# or for specific dockerfile...
+docker build -f Dockerfile.local . -t hds --network=host
+
 docker run --rm -it --network=host --name house-dashboard-server -v $local-credential-folder:/root/.aws/credentials:ro hds 
 ```
 
