@@ -10,6 +10,7 @@ RUN dotnet restore
 
 # Copy everything else and build
 COPY . ./
+RUN dotnet dev-certs https --trust
 RUN dotnet publish -c Release -o out
 
 # Build runtime image
@@ -18,7 +19,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:5.0-focal
 WORKDIR /app
 COPY --from=build /app/out .
 
-ENV ASPNETCORE_URLS=http://0.0.0.0:5000 
-ENV ASPNETCORE_ENVIRONMENT=Development
+ENV ASPNETCORE_URLS=https://0.0.0.0:5001 
+ENV ASPNETCORE_ENVIRONMENT=Production
 
 ENTRYPOINT ["dotnet", "house-dashboard-server.dll"]
