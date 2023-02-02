@@ -13,4 +13,4 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Publish
-        run: dotnet publish --runtime linux-arm --self-contained --output ./Release
+        run: dotnet publish -c Release -o /home/pi/web
