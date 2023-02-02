@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build:
 
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         dotnet-version: ['3.0', '3.1.x', '5.0.x' ]
@@ -21,4 +21,4 @@ jobs:
       - name: Build
         run: dotnet build --configuration Release --no-restore
       - name: Publish
-        run: dotnet publish -c Release --output ./Release
+        run: dotnet publish --runtime linux-arm --self-contained --output ./Release
