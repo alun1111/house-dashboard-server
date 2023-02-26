@@ -11,6 +11,8 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Build
+        env:
+            apikey: ${{ secrets.APIKEY }}
         run: dotnet build --configuration Release --no-restore
       - name: Publish
         run: dotnet publish -c Release -o /home/pi/web
