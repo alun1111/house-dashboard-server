@@ -10,9 +10,11 @@ jobs:
       - uses: actions/checkout@v3
       - name: Install dependencies
         run: dotnet restore
+      - name: Secret Init
+        run: dotnet user-secrets init
+      - name: Secret Set
+        run: dotnet user-secrets set "ServiceApiKey" "${{ secrets.APIKEY }}"
       - name: Build
-        env:
-            apikey: ${{ secrets.APIKEY }}
         run: dotnet build --configuration Release --no-restore
       - name: Publish
         run: dotnet publish -c Release -o /home/pi/web
