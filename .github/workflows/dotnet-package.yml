@@ -11,9 +11,6 @@ jobs:
       - name: Install dependencies
         run: dotnet restore
       - name: Build
-        run: dotnet user-secrets set "ServiceApiKey" "${{ secrets.APIKEY }}"
         run: dotnet build --configuration Release --no-restore
       - name: Publish
-        env:
-            ASPNETCORE_URLS: "https://+;http://+"
-        run: dotnet publish -c Release -o /home/pi/web
+        run: dotnet publish -c Release -o ~/web/house-dashboard-server
