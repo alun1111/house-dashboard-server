@@ -16,5 +16,5 @@ jobs:
         run: dotnet publish -c Release -o ~/web/house-dashboard-server
       - name: Start service
         run: | 
-          systemctl daemon-reload
-          systemctl restart house-dashboard-server
+          systemctl --user daemon-reload
+          systemctl --user restart house-dashboard-server
