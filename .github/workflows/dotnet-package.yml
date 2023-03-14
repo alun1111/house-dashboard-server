@@ -12,12 +12,9 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
-      - name: Stop service
-        run: |
-          systemctl --user stop house-dashboard-server
       - name: Publish
         run: dotnet publish -c Release -o ~/web/house-dashboard-server
       - name: Start service
         run: | 
-          systemctl --user daemon-reload
-          systemctl --user start house-dashboard-server
+          systemctl daemon-reload
+          systemctl restart house-dashboard-server
