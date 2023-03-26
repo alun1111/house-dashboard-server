@@ -12,6 +12,6 @@ jobs:
         run: dotnet restore
       - name: Build
         run: dotnet build --configuration Release --no-restore
-      - name: Publish
+      - name: Restart and publish
         run: |
-            ./restart-service.sh
+            restart-service.sh
